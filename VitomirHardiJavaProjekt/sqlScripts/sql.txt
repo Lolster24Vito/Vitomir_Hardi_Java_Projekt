@@ -1,0 +1,38 @@
+CREATE DATABASE MoviesJavaVH
+GO
+USE MoviesJavaVH
+GO
+
+CREATE TABLE Movie
+(
+	Id INT PRIMARY KEY IDENTITY,
+	Title NVARCHAR(300),
+	PublishDate DATETIME,
+    [Description] NVARCHAR(1200),
+	OriginalName NVARCHAR(300),
+	[Duration] int,
+	Link NVARCHAR(300),
+	PosterPath NVARCHAR(300),
+	ReleasedDate Date
+)
+GO
+
+CREATE PROCEDURE createMovie
+	@Title NVARCHAR(300),
+	@PublishDate DATETIME,
+	@Description NVARCHAR(1200),
+	@OriginalName NVARCHAR(300),
+	@Duration int,
+	@Link NVARCHAR(300),
+	@PosterPath NVARCHAR(300),
+	@PublishedDate NVARCHAR(90),
+	@ReleasedDate Date,
+    @Id INT OUTPUT
+
+AS 
+BEGIN 
+	INSERT INTO Movie(Title,PublishDate,Description,OriginalName,Duration,Link,PosterPath,ReleasedDate)
+	VALUES(@Title,@PublishDate,@Description,@OriginalName,@Duration,@Link,@PosterPath,@ReleasedDate)
+	SET @Id = SCOPE_IDENTITY()
+END
+GO
