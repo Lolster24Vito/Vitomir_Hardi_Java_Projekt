@@ -49,7 +49,7 @@ public class AdminPrototype extends javax.swing.JFrame {
 
         btnUpload = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jlMovies = new javax.swing.JList<>();
         btnDeleteAll = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -61,7 +61,7 @@ public class AdminPrototype extends javax.swing.JFrame {
             }
         });
 
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(jlMovies);
 
         btnDeleteAll.setText("Brisanje svih podataka");
         btnDeleteAll.addActionListener(new java.awt.event.ActionListener() {
@@ -175,8 +175,8 @@ public class AdminPrototype extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeleteAll;
     private javax.swing.JButton btnUpload;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList<String> jlMovies;
     // End of variables declaration//GEN-END:variables
 
   

@@ -151,6 +151,14 @@ public class Movie {
     public void setReleased(Date released) {
         this.released = released;
     }
+
+    @Override
+    public String toString() {
+        return title;
+//return super.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
  
  
 
