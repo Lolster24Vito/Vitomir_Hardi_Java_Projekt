@@ -26,6 +26,21 @@ public class Movie {
 
  private Set<Actor> actors=new HashSet<>();
 
+    public Movie(int id, String title, LocalDateTime pubDate, String description, String originalName, int duration, String posterPath, String link, Date released) {
+        this.id = id;
+        this.title = title;
+        this.pubDate = pubDate;
+        this.description = description;
+        this.originalName = originalName;
+        this.duration = duration;
+        this.posterPath = posterPath;
+        this.link = link;
+        this.released = released;
+    }
+
+    public Movie() {
+    }
+
 
  private int duration;
  

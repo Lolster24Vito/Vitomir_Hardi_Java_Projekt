@@ -23,6 +23,7 @@ public interface Repository {
     void setMovieDirectors(Movie movie) throws Exception ;
     void setMovieGenres(Movie movie) throws Exception ;
     void deleteAllData() throws Exception;
+    MovieArchive getMovieData() throws Exception;
     //void updateArticle(int id, Article data) throws Exception;
    // void deleteArticle(int id) throws Exception;
    // Optional<Article> selectArticle(int id) throws Exception;

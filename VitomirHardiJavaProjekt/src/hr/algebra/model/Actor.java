@@ -16,7 +16,7 @@ public class Actor {
     private String name;
 
     public Actor(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public String getName() {

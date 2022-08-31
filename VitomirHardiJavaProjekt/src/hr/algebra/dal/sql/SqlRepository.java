@@ -14,11 +14,13 @@ import hr.algebra.model.MovieArchive;
 import hr.algebra.utils.FileUtils;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.sql.DataSource;
@@ -45,10 +47,13 @@ public class SqlRepository implements Repository {
 
 
 
-    private static final String CREATE_MOVIE = "{ CALL createMovie (?,?,?,?,?,?,?,?,?) }";
+    private static final String CREATE_MOVIE = "{ CALL createMovie (?,?,?,?,?,?,?,?,?) }"; 
+
     private static final String SET_MOVIE_ACTOR = "{ CALL SetMovieActor (?,?) }";
     private static final String SET_MOVIE_DIRECTOR = "{ CALL SetMovieDirector (?,?) }"; 
     private static final String SET_MOVIE_GENRE = "{ CALL SetMovieGenre (?,?) }"; 
+    private static final String SELECT_MOVIES = "{ CALL SelectMovies () }";
+
     private static final String DELETE_ALL_DATA = "{ CALL DeleteAllData () }";
 
 
@@ -186,6 +191,50 @@ movie.setId(insertedId);
         
         FileUtils.deleteFilesFromDirectory(POSTER_DIR);
         
+    }
+
+    @Override
+    public MovieArchive getMovieData() throws Exception {
+        MovieArchive movieArchive=new MovieArchive();
+        List<Movie> movies=new ArrayList<>();
+        
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(SELECT_MOVIES);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) 
+            
+            {
+                Movie movie=new Movie();
+                movie.setId(rs.getInt(ID_MOVIE));
+                movie.setTitle(rs.getString(TITLE));
+                movie.setDescription(rs.getString(DESCRIPTION));
+                movie.setOriginalName(rs.getString(ORIGINAL_NAME));
+                movie.setDuration(rs.getInt(DURATION));
+                movie.setPosterPath(rs.getString(POSTER_PATH));
+                movie.setLink(rs.getString(LINK));
+                
+                
+                movies.add(movie);
+                
+              /*  movies.add(new Movie{
+                        rs.getInt(ID_MOVIE),
+                        rs.getString(TITLE),
+                        rs.getString(LINK),
+                        rs.getString(DESCRIPTION),
+                        rs.getString(PICTURE_PATH),
+                        LocalDateTime.parse(rs.getString(PUBLISHED_DATE), Article.DATE_FORMATTER)));*/
+            }
+        }
+        //SAME THING BUT WITH ACTORS GENRE AND DIRECTORS
+        
+        
+        movieArchive.setMovies(movies);
+        //TODO napravi
+        
+        return movieArchive;
     }
     
         
