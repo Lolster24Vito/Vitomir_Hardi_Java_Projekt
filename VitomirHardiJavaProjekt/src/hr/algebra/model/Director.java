@@ -12,6 +12,11 @@ import java.util.Objects;
  * @author vitom
  */
 public class Director {
+
+    public Director(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
         private int id;
 
     public String getName() {

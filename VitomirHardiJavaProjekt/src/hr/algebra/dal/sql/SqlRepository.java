@@ -8,6 +8,7 @@ package hr.algebra.dal.sql;
 import hr.algebra.dal.Repository;
 import hr.algebra.model.Actor;
 import hr.algebra.model.Director;
+import hr.algebra.model.Generic2ForeignKeyDB;
 import hr.algebra.model.Genre;
 import hr.algebra.model.Movie;
 import hr.algebra.model.MovieArchive;
@@ -15,6 +16,7 @@ import hr.algebra.utils.FileUtils;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.time.LocalDate;
@@ -22,7 +24,11 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javax.sql.DataSource;
 
 /**
@@ -32,6 +38,8 @@ import javax.sql.DataSource;
 public class SqlRepository implements Repository {
 
     private static final String ID_MOVIE = "Id";
+    private static final String ID_GENERIC = "Id";
+
     private static final String TITLE = "Title";
     private static final String PUBLISH_DATE = "PublishDate";
     private static final String DESCRIPTION = "Description";
@@ -53,6 +61,14 @@ public class SqlRepository implements Repository {
     private static final String SET_MOVIE_DIRECTOR = "{ CALL SetMovieDirector (?,?) }"; 
     private static final String SET_MOVIE_GENRE = "{ CALL SetMovieGenre (?,?) }"; 
     private static final String SELECT_MOVIES = "{ CALL SelectMovies () }";
+    private static final String SELECT_ACTORS = "{ CALL SelectActors () }";
+    private static final String SELECT_DIRECTORS = "{ CALL SelectDirectors () }"; 
+    private static final String SELECT_GENRES = "{ CALL SelectGenres () }";
+
+    
+    
+
+
 
     private static final String DELETE_ALL_DATA = "{ CALL DeleteAllData () }";
 
@@ -198,6 +214,18 @@ movie.setId(insertedId);
         MovieArchive movieArchive=new MovieArchive();
         List<Movie> movies=new ArrayList<>();
         
+        Map<Integer ,String> actorsMap= new HashMap<>();
+                Map<Integer ,String> directorsMap= new HashMap<>();
+        Map<Integer ,String> genresMap= new HashMap<>();
+
+        
+        /*Set<Actor> actors=new HashSet<>();
+        Set<Director> directors=new HashSet<>();
+        Set<Genre> genres=new HashSet<>();*/
+
+
+
+        
         DataSource dataSource = DataSourceSingleton.getInstance();
         
         try (Connection con = dataSource.getConnection();
@@ -228,13 +256,67 @@ movie.setId(insertedId);
                         LocalDateTime.parse(rs.getString(PUBLISHED_DATE), Article.DATE_FORMATTER)));*/
             }
         }
+              movieArchive.setMovies(movies);
         //SAME THING BUT WITH ACTORS GENRE AND DIRECTORS
+       /* try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(SELECT_ACTORS);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) 
+            
+            {
+                Actor actor=new Actor();
+                actor.setId(rs.getInt(ID_GENERIC));
+                actor.setName(rs.getString(NAME));
+                actors.add(actor);
+               
+            }
+        }*/
+       
+       
+     actorsMap=getGenericDatabase(SELECT_ACTORS,dataSource);
+     Set<Actor> actorSet=new HashSet<>();
+     actorsMap.forEach((key,value)->actorSet.add(new Actor(key, value)));
+     
+          movieArchive.setActors(actorSet);
+          
         
-        
-        movieArchive.setMovies(movies);
+        directorsMap=getGenericDatabase(SELECT_DIRECTORS,dataSource);
+             Set<Director> directorSet=new HashSet<>();
+                  directorsMap.forEach((key,value)->directorSet.add(new Director(key, value)));
+                  movieArchive.setDirectors(directorSet);
+
+     genresMap=getGenericDatabase(SELECT_GENRES,dataSource);
+             Set<Genre> genreSet=new HashSet<>();
+                  genresMap.forEach((key,value)->genreSet.add(new Genre(key, value)));
+                  movieArchive.setGenres(genreSet);     
+      
+                  
+                  
+                 // movieArchive.getMovies().get(0).
         //TODO napravi
         
+        
+        
         return movieArchive;
+    }
+    private Map<Integer,String> getGenericDatabase(String procedureName,DataSource dataSource) throws SQLException{
+        
+        Map<Integer,String> items=new HashMap<>();  
+         try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(procedureName);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) 
+            
+            {
+              items.put(rs.getInt(ID_GENERIC), rs.getString(NAME));
+
+               
+            }
+        }
+         return items;
+        
     }
     
         
