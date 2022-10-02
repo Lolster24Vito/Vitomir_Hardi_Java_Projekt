@@ -16,6 +16,12 @@ public class Generic2ForeignKeyDB {
     public int ForeignKeyId;
     public String Name;
 
+    public Generic2ForeignKeyDB(int MovieId, int ForeignKeyId, String Name) {
+        this.MovieId = MovieId;
+        this.ForeignKeyId = ForeignKeyId;
+        this.Name = Name;
+    }
+
     
     
 }

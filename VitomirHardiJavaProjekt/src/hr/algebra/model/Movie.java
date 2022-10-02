@@ -26,7 +26,18 @@ public class Movie {
 
  private Set<Actor> actors=new HashSet<>();
 
-    public Movie(int id, String title, LocalDateTime pubDate, String description, String originalName, int duration, String posterPath, String link, Date released) {
+
+
+
+ private int duration;
+ 
+ private Set<Genre> genres=new HashSet<>();
+
+ private String posterPath;
+ private String link;
+ private Date released;
+ 
+     public Movie(int id, String title, LocalDateTime pubDate, String description, String originalName, int duration, String posterPath, String link, Date released) {
         this.id = id;
         this.title = title;
         this.pubDate = pubDate;
@@ -40,15 +51,6 @@ public class Movie {
 
     public Movie() {
     }
-
-
- private int duration;
- 
- private Set<Genre> genres=new HashSet<>();
-
- private String posterPath;
- private String link;
- private Date released;
 
     public String getTitle() {
         return title;
@@ -107,6 +109,10 @@ public class Movie {
     public void addActor(String name)
     {
         Actor actor=new Actor(name);
+    actors.add(actor);
+    }
+    public void addActor(Actor actor)
+    {
     actors.add(actor);
     }
 

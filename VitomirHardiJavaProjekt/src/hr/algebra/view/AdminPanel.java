@@ -220,16 +220,22 @@ public class AdminPanel extends javax.swing.JPanel {
         MovieArchive movieArchiveDatabase;
         try {
 
+            //sql working code
             movieArchiveDatabase=repository.getMovieData();
+            
+            
             //repository.createMovies(movieArchive.getMovies());
             //repository.setMovieActor("Test", 236);
             //  repository.createMovies(movieArchive.getMovies());
             
-            /*
+            
+            
+             //xml working code
+             /*
             movieArchiveloaded=MovieParser.parse();
             repository.addMovieArchive(movieArchiveloaded);
-            updateJLists(movieArchiveloaded);*/
-            
+            updateJLists(movieArchiveloaded);
+            */
             
 
 
