@@ -14,7 +14,6 @@ public class StringHtmlTagUtil {
     }
     public static String RemoveHTMLTags(String line){
         String nohtml = line.replaceAll("\\<.*?>","");
-     System.out.println(nohtml);
         return nohtml;
     }
 }

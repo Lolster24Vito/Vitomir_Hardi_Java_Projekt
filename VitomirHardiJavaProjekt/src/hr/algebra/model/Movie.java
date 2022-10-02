@@ -16,28 +16,26 @@ import java.util.Set;
  * @author vitom
  */
 public class Movie {
- private int id;
- private String title;
- private LocalDateTime pubDate;
- private String description;
- private String originalName;
- 
- private Set<Director> directors=new HashSet<>();
 
- private Set<Actor> actors=new HashSet<>();
+    private int id;
+    private String title;
+    private LocalDateTime pubDate;
+    private String description;
+    private String originalName;
 
+    private Set<Director> directors = new HashSet<>();
 
+    private Set<Actor> actors = new HashSet<>();
 
+    private int duration;
 
- private int duration;
- 
- private Set<Genre> genres=new HashSet<>();
+    private Set<Genre> genres = new HashSet<>();
 
- private String posterPath;
- private String link;
- private Date released;
- 
-     public Movie(int id, String title, LocalDateTime pubDate, String description, String originalName, int duration, String posterPath, String link, Date released) {
+    private String posterPath;
+    private String link;
+    private Date released;
+
+    public Movie(int id, String title, LocalDateTime pubDate, String description, String originalName, int duration, String posterPath, String link, Date released) {
         this.id = id;
         this.title = title;
         this.pubDate = pubDate;
@@ -84,8 +82,6 @@ public class Movie {
         this.originalName = originalName;
     }
 
-   
-
     public Set<Director> getDirectors() {
         return directors;
     }
@@ -93,10 +89,13 @@ public class Movie {
     public void setDirectors(Set<Director> directors) {
         this.directors = directors;
     }
-        public void addDirector(String name)
-    {
-        Director director=new Director(name);
-    directors.add(director);
+
+    public void addDirector(String name) {
+        Director director = new Director(name);
+        directors.add(director);
+    }
+    public void addDirector(Director director) {
+        directors.add(director);
     }
 
     public Set<Actor> getActors() {
@@ -106,17 +105,15 @@ public class Movie {
     public void setActors(Set<Actor> actors) {
         this.actors = actors;
     }
-    public void addActor(String name)
-    {
-        Actor actor=new Actor(name);
-    actors.add(actor);
-    }
-    public void addActor(Actor actor)
-    {
-    actors.add(actor);
+
+    public void addActor(String name) {
+        Actor actor = new Actor(name);
+        actors.add(actor);
     }
 
-    
+    public void addActor(Actor actor) {
+        actors.add(actor);
+    }
 
     public int getDuration() {
         return duration;
@@ -133,13 +130,14 @@ public class Movie {
     public void setGenres(Set<Genre> genres) {
         this.genres = genres;
     }
-    public void addGenre(String name)
-    {
-        Genre genre=new Genre(name);
-    genres.add(genre);
-    }
 
-   
+    public void addGenre(String name) {
+        Genre genre = new Genre(name);
+        genres.add(genre);
+    }
+     public void addGenre(Genre genre) {
+        genres.add(genre);
+    }
 
     public String getPosterPath() {
         return posterPath;
@@ -178,9 +176,5 @@ public class Movie {
         return title;
 //return super.toString(); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
- 
- 
 
 }

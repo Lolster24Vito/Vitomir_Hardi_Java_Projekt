@@ -52,7 +52,10 @@ import static javax.lang.model.element.NestingKind.LOCAL;
  */
 public class MovieParser {
 
-    private static final String RSS_URL = "https://web.archive.org/web/20220122021902if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1";
+   //https://web.archive.org/web/20211018134319if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1
+   //https://web.archive.org/web/20220122021902if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1
+        //private static final String RSS_URL = "https://web.archive.org/web/20220122021902if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1";
+private static final String RSS_URL = "https://web.archive.org/web/20211018134319if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1";
     private static final String ATTRIBUTE_URL = "url";
     private static final String EXT = ".jpg";
     private static final String DIR = "assets/moviePosters";
@@ -178,7 +181,7 @@ public class MovieParser {
                                 }
                             }
                             if (!data.isEmpty()) {
-                                System.out.println("data :" + data);
+                                //System.out.println("data :" + data);
 
                             }
                         }

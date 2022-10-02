@@ -6,6 +6,8 @@
 package hr.algebra;
 
 import hr.algebra.view.AdminPanel;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 
 /**
  *
@@ -22,7 +24,7 @@ public class MainFrame extends javax.swing.JFrame {
     
     public MainFrame() {
         initComponents();
-        configurePanels();
+        configurePanels();     
     }
 
     /**
@@ -99,6 +101,28 @@ public class MainFrame extends javax.swing.JFrame {
      private void configurePanels() {
         tpContent.add(UPLOAD_MOVIES, new AdminPanel());
        // tpContent.add(EDIT_MOVIES, new EditArticlesPanel());
+    }
+     
+     public String encryptPass(String password) {
+        try {
+            //retrieve instance of the encryptor of SHA-256
+            MessageDigest digestor = MessageDigest.getInstance("SHA-256");
+//retrieve bytes to encrypt
+            byte[] encodedhash = digestor.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder encryptionValue = new StringBuilder(2 * encodedhash.length);
+//perform encryption
+            for (int i = 0; i < encodedhash.length; i++) {
+                String hexVal = Integer.toHexString(0xff & encodedhash[i]);
+                if (hexVal.length() == 1) {
+                    encryptionValue.append('0');
+                }
+                encryptionValue.append(hexVal);
+            }
+//return encrypted value
+            return encryptionValue.toString();
+} catch (Exception ex) {
+            return ex.getMessage();
+        }
     }
 
 }

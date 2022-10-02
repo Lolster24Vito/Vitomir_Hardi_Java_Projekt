@@ -208,74 +208,27 @@ public class SqlRepository implements Repository {
     @Override
     public MovieArchive getMovieData() throws Exception {
         MovieArchive movieArchive = new MovieArchive();
-        List<Movie> movies = new ArrayList<>();
+        DataSource dataSource = DataSourceSingleton.getInstance();
 
+        List<Movie> movies = getMovies(dataSource);
+        
         Map<Integer, String> actorsMap = new HashMap<>();
         Map<Integer, String> directorsMap = new HashMap<>();
         Map<Integer, String> genresMap = new HashMap<>();
 
-        /*Set<Actor> actors=new HashSet<>();
-        Set<Director> directors=new HashSet<>();
-        Set<Genre> genres=new HashSet<>();*/
-        DataSource dataSource = DataSourceSingleton.getInstance();
-
-        //get movies
-        try (Connection con = dataSource.getConnection();
-                CallableStatement stmt = con.prepareCall(SELECT_MOVIES);
-                ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Movie movie = new Movie();
-                movie.setId(rs.getInt(ID_MOVIE));
-                movie.setTitle(rs.getString(TITLE));
-                movie.setDescription(rs.getString(DESCRIPTION));
-                movie.setOriginalName(rs.getString(ORIGINAL_NAME));
-                movie.setDuration(rs.getInt(DURATION));
-                movie.setPosterPath(rs.getString(POSTER_PATH));
-                movie.setLink(rs.getString(LINK));
-                movie.setReleased(rs.getDate(RELEASED_DATE));
-                //publish date is a nvarchar in the SQL 
-                movie.setPubDate(LocalDateTime.parse(rs.getString(PUBLISH_DATE)));
-                
-                movies.add(movie);
-
-                /*  movies.add(new Movie{
-                        rs.getInt(ID_MOVIE),
-                        rs.getString(TITLE),
-                        rs.getString(LINK),
-                        rs.getString(DESCRIPTION),
-                        rs.getString(PICTURE_PATH),
-                        LocalDateTime.parse(rs.getString(PUBLISHED_DATE), Article.DATE_FORMATTER)));*/
-            }
-        }
-        movieArchive.setMovies(movies);
-        //SAME THING BUT WITH ACTORS GENRE AND DIRECTORS
-        /* try (Connection con = dataSource.getConnection();
-                CallableStatement stmt = con.prepareCall(SELECT_ACTORS);
-                ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) 
-            
-            {
-                Actor actor=new Actor();
-                actor.setId(rs.getInt(ID_GENERIC));
-                actor.setName(rs.getString(NAME));
-                actors.add(actor);
-               
-            }
-        }*/
-
+       
+        //get actors
         actorsMap = getGenericDatabase(SELECT_ACTORS, dataSource);
         Set<Actor> actorSet = new HashSet<>();
         actorsMap.forEach((key, value) -> actorSet.add(new Actor(key, value)));
 
         movieArchive.setActors(actorSet);
-
+        //get directors
         directorsMap = getGenericDatabase(SELECT_DIRECTORS, dataSource);
         Set<Director> directorSet = new HashSet<>();
         directorsMap.forEach((key, value) -> directorSet.add(new Director(key, value)));
         movieArchive.setDirectors(directorSet);
-
+        //get genre
         genresMap = getGenericDatabase(SELECT_GENRES, dataSource);
         Set<Genre> genreSet = new HashSet<>();
         genresMap.forEach((key, value) -> genreSet.add(new Genre(key, value)));
@@ -297,27 +250,96 @@ public class SqlRepository implements Repository {
         List<Generic2ForeignKeyDB> directorsInMovies = getGeneric2ForeignKeys(SELECT_MOVIE_DIRECTOR,DIRECTOR_ID,dataSource);
         List<Generic2ForeignKeyDB> genresInMovies = getGeneric2ForeignKeys(SELECT_MOVIE_GENRE,GENRE_ID,dataSource);
 
-           for(Generic2ForeignKeyDB actorMovie : actorsInMovies){
-               int listIndex=-1;
-               int i=0;
-               for (Movie movie : movies) {
-                   if(movie.getId()==actorMovie.MovieId){
-                       listIndex=i;
-                       break;
-                   }
-                   i++;
-               }
-               actorsMap.get(actorMovie.ForeignKeyId);
-               if(listIndex!=-1){
-                                  movies.get(listIndex).addActor(new Actor(actorMovie.ForeignKeyId,actorsMap.get(actorMovie.ForeignKeyId)));
-               }               
-           }
+        //set actors in movie class
+        for (Generic2ForeignKeyDB actorMovie : actorsInMovies) {
+            int listIndex = -1;
+            int i = 0;
+            //search movie id if it exists
+            for (Movie movie : movies) {
+                if (movie.getId() == actorMovie.MovieId) {
+                    listIndex = i;
+                    break;
+                }
+                i++;
+            }
+            if (listIndex != -1) {
+                movies.get(listIndex).addActor(new Actor(actorMovie.ForeignKeyId, actorsMap.get(actorMovie.ForeignKeyId)));
+            }
+        }
+        //set directors in movie class
+        for (Generic2ForeignKeyDB directorMovie : directorsInMovies) {
+            int listIndex = -1;
+            int i = 0;
+            //search movie id if it exists
+            for (Movie movie : movies) {
+                if (movie.getId() == directorMovie.MovieId) {
+                    listIndex = i;
+                    break;
+                }
+                i++;
+            }
+            if (listIndex != -1) {
+                movies.get(listIndex).addDirector(new Director(directorMovie.ForeignKeyId, directorsMap.get(directorMovie.ForeignKeyId)));
+            }
+        }
+        //set genre in movie class
+                for (Generic2ForeignKeyDB genreMovie : genresInMovies) {
+            int listIndex = -1;
+            int i = 0;
+            //search movie id if it exists
+            for (Movie movie : movies) {
+                if (movie.getId() == genreMovie.MovieId) {
+                    listIndex = i;
+                    break;
+                }
+                i++;
+            }
+            if (listIndex != -1) {
+                movies.get(listIndex).addGenre(new Genre(genreMovie.ForeignKeyId, genresMap.get(genreMovie.ForeignKeyId)));
+            }
+        }
            
         movieArchive.setMovies(movies);
 
         // movieArchive.getMovies().get(0).
         //TODO napravi
         return movieArchive;
+    }
+
+    public List<Movie> getMovies(DataSource dataSource) throws SQLException {
+        //get movies
+                List<Movie> movies = new ArrayList<>();
+
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(SELECT_MOVIES);
+                ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                Movie movie = new Movie();
+                movie.setId(rs.getInt(ID_MOVIE));
+                movie.setTitle(rs.getString(TITLE));
+                movie.setDescription(rs.getString(DESCRIPTION));
+                movie.setOriginalName(rs.getString(ORIGINAL_NAME));
+                movie.setDuration(rs.getInt(DURATION));
+                movie.setPosterPath(rs.getString(POSTER_PATH));
+                movie.setLink(rs.getString(LINK));
+                movie.setReleased(rs.getDate(RELEASED_DATE));
+                //publish date is a nvarchar in the SQL
+                movie.setPubDate(LocalDateTime.parse(rs.getString(PUBLISH_DATE)));
+                
+                movies.add(movie);
+                
+                /*  movies.add(new Movie{
+                rs.getInt(ID_MOVIE),
+                rs.getString(TITLE),
+                rs.getString(LINK),
+                rs.getString(DESCRIPTION),
+                rs.getString(PICTURE_PATH),
+                LocalDateTime.parse(rs.getString(PUBLISHED_DATE), Article.DATE_FORMATTER)));*/
+            }
+        }
+        return movies;
+        //movieArchive.setMovies(movies);
     }
 
     private Map<Integer, String> getGenericDatabase(String procedureName, DataSource dataSource) throws SQLException {

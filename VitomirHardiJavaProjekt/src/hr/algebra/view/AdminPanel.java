@@ -66,6 +66,11 @@ public class AdminPanel extends javax.swing.JPanel {
 
      repository = RepositoryFactory.getRepository();
      
+     
+            MovieArchive movieArchiveDatabase=repository.getMovieData();
+             updateJLists(movieArchiveDatabase);
+
+     
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -221,7 +226,7 @@ public class AdminPanel extends javax.swing.JPanel {
         try {
 
             //sql working code
-            movieArchiveDatabase=repository.getMovieData();
+            //movieArchiveDatabase=repository.getMovieData();
             
             
             //repository.createMovies(movieArchive.getMovies());
@@ -231,11 +236,10 @@ public class AdminPanel extends javax.swing.JPanel {
             
             
              //xml working code
-             /*
+             
             movieArchiveloaded=MovieParser.parse();
             repository.addMovieArchive(movieArchiveloaded);
-            updateJLists(movieArchiveloaded);
-            */
+             updateJLists(repository.getMovieData());
             
 
 
@@ -253,6 +257,7 @@ public class AdminPanel extends javax.swing.JPanel {
         try {
             // TODO add your handling code here:
             repository.deleteAllData();
+            
         } catch (Exception ex) {
             Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -278,15 +283,8 @@ public class AdminPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void updateJListMovies(List<Movie> movies) {
-      //jlMovies.Add
       moviesModel.clear();
-
        movies.forEach(movie-> moviesModel.addElement(movie.toString()));
-      
-      
-             
-
-      //  movies.forEach(moviesModel::addElement);
         jlMovies.setModel(moviesModel);      
     }
 
@@ -323,6 +321,14 @@ public class AdminPanel extends javax.swing.JPanel {
             updateJListActors(movieArchive.getActors());
             updateJListDirectors(movieArchive.getDirectors());
             updateJListGenres(movieArchive.getGenres());
+    }
+    private void clearJLists(){
+        moviesModel.clear();
+        actorsModel.clear();
+        genresModel.clear();
+        jlMovies.removeAll();      
+        jlActors.removeAll();
+        jlGenres.removeAll();
     }
     
     
