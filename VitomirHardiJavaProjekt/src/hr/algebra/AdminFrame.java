@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package hr.algebra.view;
+package hr.algebra;
 
-import hr.algebra.AdminPrototype;
-import hr.algebra.AdminFrame;
+import hr.algebra.dal.MovieRepository;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.model.Actor;
 import hr.algebra.model.Director;
@@ -14,38 +13,39 @@ import hr.algebra.model.Genre;
 import hr.algebra.model.Movie;
 import hr.algebra.model.MovieArchive;
 import hr.algebra.parsers.rss.MovieParser;
+import hr.algebra.view.AdminPanel;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.xml.stream.XMLStreamException;
-import hr.algebra.dal.MovieRepository;
 
 /**
  *
  * @author vitom
  */
-public class AdminPanel extends javax.swing.JPanel {
+public class AdminFrame extends javax.swing.JFrame {
 
     /**
-     * Creates new form AdminPanel
+     * Creates new form MainFrame
      */
-        private MovieRepository repository;
+     private MovieRepository repository;
 
      private DefaultListModel<String> moviesModel; 
      private DefaultListModel<String> actorsModel;
      private DefaultListModel<String> directorsModel;
      private DefaultListModel<String> genresModel;
-
-
-
-     
-    public AdminPanel() {
+    
+      private static final String UPLOAD_MOVIES = "Upload articles";
+    private static final String EDIT_MOVIES = "Edit articles";
+    
+    
+    public AdminFrame() {
         initComponents();
         try{
         init();
@@ -54,9 +54,8 @@ public class AdminPanel extends javax.swing.JPanel {
                         Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
                         
 
-        }
+        }   
     }
-
     
      private void init() throws Exception {
           moviesModel=new DefaultListModel<>();
@@ -72,6 +71,7 @@ public class AdminPanel extends javax.swing.JPanel {
 
      
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -81,6 +81,7 @@ public class AdminPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         btnUpload = new javax.swing.JButton();
         btnDeleteAll = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -97,7 +98,9 @@ public class AdminPanel extends javax.swing.JPanel {
         jScrollPane4 = new javax.swing.JScrollPane();
         jlGenres = new javax.swing.JList<>();
 
-        setPreferredSize(new java.awt.Dimension(1200, 800));
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(1200, 800));
 
         btnUpload.setText("Upload novih podataka");
         btnUpload.addActionListener(new java.awt.event.ActionListener() {
@@ -121,7 +124,7 @@ public class AdminPanel extends javax.swing.JPanel {
             jPanelMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelMoviesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1073, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1143, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanelMoviesLayout.setVerticalGroup(
@@ -143,7 +146,7 @@ public class AdminPanel extends javax.swing.JPanel {
             .addGroup(jPanelActorsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1065, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         jPanelActorsLayout.setVerticalGroup(
             jPanelActorsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,7 +165,7 @@ public class AdminPanel extends javax.swing.JPanel {
         jPanelDirectorsLayout.setHorizontalGroup(
             jPanelDirectorsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelDirectorsLayout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1079, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1149, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanelDirectorsLayout.setVerticalGroup(
@@ -179,7 +182,7 @@ public class AdminPanel extends javax.swing.JPanel {
         jPanelGenresLayout.setHorizontalGroup(
             jPanelGenresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelGenresLayout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1079, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1149, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanelGenresLayout.setVerticalGroup(
@@ -191,32 +194,55 @@ public class AdminPanel extends javax.swing.JPanel {
 
         jTabbedPane1.addTab("Genres", jPanelGenres);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(120, 120, 120)
                 .addComponent(btnUpload, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnDeleteAll, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(101, 101, 101))
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addComponent(jTabbedPane1)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1155, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 604, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
                     .addComponent(btnDeleteAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(35, 35, 35))
         );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1200, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
@@ -227,21 +253,16 @@ public class AdminPanel extends javax.swing.JPanel {
 
             //sql working code
             //movieArchiveDatabase=repository.getMovieData();
-            
-            
+
             //repository.createMovies(movieArchive.getMovies());
             //repository.setMovieActor("Test", 236);
             //  repository.createMovies(movieArchive.getMovies());
-            
-            
-            
-             //xml working code
-             
+
+            //xml working code
+
             movieArchiveloaded=MovieParser.parse();
             repository.addMovieArchive(movieArchiveloaded);
-             updateJLists(repository.getMovieData());
-            
-
+            updateJLists(repository.getMovieData());
 
         } catch (IOException ex) {
             Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
@@ -250,23 +271,58 @@ public class AdminPanel extends javax.swing.JPanel {
         } catch (Exception ex) {
             Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }//GEN-LAST:event_btnUploadActionPerformed
 
     private void btnDeleteAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteAllActionPerformed
         try {
             // TODO add your handling code here:
             repository.deleteAllData();
-            
+
         } catch (Exception ex) {
             Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnDeleteAllActionPerformed
 
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(AdminFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(AdminFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(AdminFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(AdminFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new AdminFrame().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeleteAll;
     private javax.swing.JButton btnUpload;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelActors;
     private javax.swing.JPanel jPanelDirectors;
     private javax.swing.JPanel jPanelGenres;
@@ -282,7 +338,7 @@ public class AdminPanel extends javax.swing.JPanel {
     private javax.swing.JList<String> jlMovies;
     // End of variables declaration//GEN-END:variables
 
-    private void updateJListMovies(List<Movie> movies) {
+  private void updateJListMovies(List<Movie> movies) {
       moviesModel.clear();
        movies.forEach(movie-> moviesModel.addElement(movie.toString()));
         jlMovies.setModel(moviesModel);      
@@ -331,5 +387,7 @@ public class AdminPanel extends javax.swing.JPanel {
         jlGenres.removeAll();
     }
     
+     
     
+
 }

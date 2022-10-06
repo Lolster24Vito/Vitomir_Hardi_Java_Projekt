@@ -5,9 +5,12 @@
  */
 package hr.algebra.view;
 
+import hr.algebra.AdminFrame;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.dal.UserRepository;
 import hr.algebra.utils.EncryptionUtils;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -126,7 +129,10 @@ public class LoginPanel extends javax.swing.JPanel {
                 lbErrorMessage.setText("Uh oh, servers down please try again later");
         }
         if(loginState==1){
-                        lbErrorMessage.setText("ADMIN");
+                        //ADMIN
+                        AdminFrame adminFrame=new AdminFrame();
+                        adminFrame.show();
+                        SwingUtilities.getWindowAncestor(this).dispose();
 
         }
                 if(loginState==2){
