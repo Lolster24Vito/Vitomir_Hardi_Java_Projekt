@@ -7,7 +7,6 @@ package hr.algebra.view;
 
 import hr.algebra.AdminPrototype;
 import hr.algebra.MainFrame;
-import hr.algebra.dal.Repository;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.model.Actor;
 import hr.algebra.model.Director;
@@ -25,6 +24,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.xml.stream.XMLStreamException;
+import hr.algebra.dal.MovieRepository;
 
 /**
  *
@@ -35,7 +35,7 @@ public class AdminPanel extends javax.swing.JPanel {
     /**
      * Creates new form AdminPanel
      */
-        private Repository repository;
+        private MovieRepository repository;
 
      private DefaultListModel<String> moviesModel; 
      private DefaultListModel<String> actorsModel;
@@ -64,7 +64,7 @@ public class AdminPanel extends javax.swing.JPanel {
           directorsModel=new DefaultListModel<>();
           genresModel=new DefaultListModel<>();
 
-     repository = RepositoryFactory.getRepository();
+         repository = RepositoryFactory.getMovieRepository();
      
      
             MovieArchive movieArchiveDatabase=repository.getMovieData();

@@ -256,8 +256,60 @@ SELECT  [Id]
 
   GO
 
+CREATE TABLE UserRoles(
+Id INT PRIMARY KEY IDENTITY,
+RoleName nvarchar(300)
+)
+GO
+INSERT INTO UserRoles(RoleName) Values ('Admin')
+INSERT INTO UserRoles(RoleName) Values ('User')
+
+GO
+
+CREATE TABLE Users
+(
+Id INT PRIMARY KEY IDENTITY,
+Username nvarchar(300),
+PasswordHash nvarchar(300),
+RoleId int FOREIGN KEY REFERENCES UserRoles(Id)
+)
+GO
+/* Password is 123*/
+INSERT INTO Users(Username,PasswordHash,RoleId)Values('Admin','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',1)
+INSERT INTO Users(Username,PasswordHash,RoleId)Values('Adminjo','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',1)
+
+GO
+
+create or alter proc CreateUser
+	@username nvarchar(300),
+	@passwordHash nvarchar(300)
+as
+Insert into Users(Username,PasswordHash,RoleId)
+VALUES (@username,@passwordHash,2)
+GO
+
+
+create or alter proc CheckIfUserExists
+	@username nvarchar(300)
+as
+  select 
+    iif(COUNT(*) > 0, 1, 0) as DoesExists
+from [MoviesJavaVH].[dbo].[Users] 
+  where Username=@username 
+GO
+
+
+create or alter proc UserLogin
+	@username nvarchar(300),
+	@passwordHash nvarchar(300)
+as 
+SELECT *
+  FROM [dbo].[Users]
+  where Username=@username AND PasswordHash=@passwordHash
+
 
 /*ovdje stao*/
+
 
 
 
@@ -314,3 +366,5 @@ BEGIN
 	SELECT * FROM Article
 END
 GO
+
+

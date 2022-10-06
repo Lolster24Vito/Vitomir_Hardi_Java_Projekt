@@ -5,17 +5,23 @@
  */
 package hr.algebra.dal;
 
-import hr.algebra.dal.sql.SqlRepository;
+import hr.algebra.dal.sql.MovieSqlRepository;
+import hr.algebra.dal.sql.UserSqlRepository;
 
 /**
  *
  * @author vitom
  */
 public class RepositoryFactory {
+
+
     private RepositoryFactory() {
     }
     
-    public static Repository getRepository() throws Exception {
-        return new SqlRepository();
+    public static MovieRepository getMovieRepository() throws Exception {
+        return new MovieSqlRepository();
+    }
+        public static UserRepository getUserRepository() {
+        return new UserSqlRepository();
     }
 }

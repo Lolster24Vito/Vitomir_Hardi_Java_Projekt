@@ -14,7 +14,7 @@ import java.util.Optional;
  *
  * @author vitom
  */
-public interface Repository {
+public interface MovieRepository {
     int createMovie(Movie movie) throws Exception;
     void createMovies(List<Movie> articles) throws Exception;    
     void addMovieArchive(MovieArchive moviearchive) throws Exception;

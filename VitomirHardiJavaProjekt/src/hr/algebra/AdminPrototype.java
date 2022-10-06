@@ -5,7 +5,6 @@
  */
 package hr.algebra;
 
-import hr.algebra.dal.Repository;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.model.Movie;
 import hr.algebra.model.MovieArchive;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.stream.XMLStreamException;
+import hr.algebra.dal.MovieRepository;
 
 /**
  *
@@ -27,7 +27,7 @@ public class AdminPrototype extends javax.swing.JFrame {
     /**
      * Creates new form Admin
      */
-    private Repository repository;
+    private MovieRepository repository;
 
     public AdminPrototype() {
         try {
@@ -133,7 +133,7 @@ public class AdminPrototype extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteAllActionPerformed
 
       private void init() throws Exception {
-     repository = RepositoryFactory.getRepository();
+     repository = RepositoryFactory.getMovieRepository();
 
     }
     /**

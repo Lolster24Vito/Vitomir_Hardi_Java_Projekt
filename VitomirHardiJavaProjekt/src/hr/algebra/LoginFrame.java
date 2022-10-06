@@ -5,26 +5,21 @@
  */
 package hr.algebra;
 
-import hr.algebra.view.AdminPanel;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
+import hr.algebra.view.LoginPanel;
+import hr.algebra.view.RegisterPanel;
 
 /**
  *
  * @author vitom
  */
-public class MainFrame extends javax.swing.JFrame {
+public class LoginFrame extends javax.swing.JFrame {
 
     /**
-     * Creates new form MainFrame
+     * Creates new form LoginFrame
      */
-      private static final String UPLOAD_MOVIES = "Upload articles";
-    private static final String EDIT_MOVIES = "Edit articles";
-    
-    
-    public MainFrame() {
+    public LoginFrame() {
         initComponents();
-        configurePanels();     
+        initTabbedPanels();
     }
 
     /**
@@ -39,21 +34,16 @@ public class MainFrame extends javax.swing.JFrame {
         tpContent = new javax.swing.JTabbedPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1200, 800));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(tpContent, javax.swing.GroupLayout.DEFAULT_SIZE, 1075, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(tpContent, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(tpContent, javax.swing.GroupLayout.DEFAULT_SIZE, 643, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(tpContent, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -76,20 +66,20 @@ public class MainFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(true);
+                new LoginFrame().setVisible(true);
             }
         });
     }
@@ -98,30 +88,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTabbedPane tpContent;
     // End of variables declaration//GEN-END:variables
 
-     private void configurePanels() {
-        tpContent.add(UPLOAD_MOVIES, new AdminPanel());
-    }
-     
-     public String encryptPass(String password) {
-        try {
-            //retrieve instance of the encryptor of SHA-256
-            MessageDigest digestor = MessageDigest.getInstance("SHA-256");
-//retrieve bytes to encrypt
-            byte[] encodedhash = digestor.digest(password.getBytes(StandardCharsets.UTF_8));
-            StringBuilder encryptionValue = new StringBuilder(2 * encodedhash.length);
-//perform encryption
-            for (int i = 0; i < encodedhash.length; i++) {
-                String hexVal = Integer.toHexString(0xff & encodedhash[i]);
-                if (hexVal.length() == 1) {
-                    encryptionValue.append('0');
-                }
-                encryptionValue.append(hexVal);
-            }
-//return encrypted value
-            return encryptionValue.toString();
-} catch (Exception ex) {
-            return ex.getMessage();
-        }
-    }
+    private void initTabbedPanels() {
+                tpContent.add("Login", new LoginPanel());
+                tpContent.add("Register", new RegisterPanel());
 
+    }
 }
