@@ -7,17 +7,18 @@ package hr.algebra;
 
 import hr.algebra.dal.MovieRepository;
 import hr.algebra.dal.RepositoryFactory;
-import hr.algebra.model.Actor;
-import hr.algebra.model.Director;
-import hr.algebra.model.Genre;
-import hr.algebra.model.Movie;
-import hr.algebra.model.MovieArchive;
+import hr.algebra.models.Actor;
+import hr.algebra.models.Director;
+import hr.algebra.models.Genre;
+import hr.algebra.models.Movie;
+import hr.algebra.models.MovieArchive;
 import hr.algebra.parsers.rss.MovieParser;
 import hr.algebra.view.AdminPanel;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -58,6 +59,9 @@ public class AdminFrame extends javax.swing.JFrame {
     }
     
      private void init() throws Exception {
+         
+        
+         
           moviesModel=new DefaultListModel<>();
           actorsModel=new DefaultListModel<>(); 
           directorsModel=new DefaultListModel<>();
@@ -65,8 +69,12 @@ public class AdminFrame extends javax.swing.JFrame {
 
          repository = RepositoryFactory.getMovieRepository();
      
-     
-            MovieArchive movieArchiveDatabase=repository.getMovieData();
+     MovieArchive movieArchiveDatabase=new MovieArchive();
+     movieArchiveDatabase.setActors(repository.getActors());
+     movieArchiveDatabase.setDirectors(repository.getDirectors());
+     movieArchiveDatabase.setGenres(repository.getGenres());
+     movieArchiveDatabase.setMovies(repository.getMovies());
+            //MovieArchive movieArchiveDatabase=repository.getMovieData();
              updateJLists(movieArchiveDatabase);
 
      
@@ -97,6 +105,9 @@ public class AdminFrame extends javax.swing.JFrame {
         jPanelGenres = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jlGenres = new javax.swing.JList<>();
+        jMenuBar = new javax.swing.JMenuBar();
+        menuProfile = new javax.swing.JMenu();
+        miSignOut = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -206,7 +217,7 @@ public class AdminFrame extends javax.swing.JFrame {
                 .addGap(101, 101, 101))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1155, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -220,6 +231,20 @@ public class AdminFrame extends javax.swing.JFrame {
                     .addComponent(btnDeleteAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(35, 35, 35))
         );
+
+        menuProfile.setText("Profile");
+
+        miSignOut.setText("Sign out");
+        miSignOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miSignOutActionPerformed(evt);
+            }
+        });
+        menuProfile.add(miSignOut);
+
+        jMenuBar.add(menuProfile);
+
+        setJMenuBar(jMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -277,11 +302,18 @@ public class AdminFrame extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             repository.deleteAllData();
-
+clearJLists();
         } catch (Exception ex) {
             Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnDeleteAllActionPerformed
+
+    private void miSignOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miSignOutActionPerformed
+        // TODO add your handling code here:
+        LoginFrame loginFrame=new LoginFrame();
+                        loginFrame.show();
+                       this.dispose();
+    }//GEN-LAST:event_miSignOutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -322,6 +354,7 @@ public class AdminFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeleteAll;
     private javax.swing.JButton btnUpload;
+    private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelActors;
     private javax.swing.JPanel jPanelDirectors;
@@ -336,6 +369,8 @@ public class AdminFrame extends javax.swing.JFrame {
     private javax.swing.JList<String> jlDirectors;
     private javax.swing.JList<String> jlGenres;
     private javax.swing.JList<String> jlMovies;
+    private javax.swing.JMenu menuProfile;
+    private javax.swing.JMenuItem miSignOut;
     // End of variables declaration//GEN-END:variables
 
   private void updateJListMovies(List<Movie> movies) {

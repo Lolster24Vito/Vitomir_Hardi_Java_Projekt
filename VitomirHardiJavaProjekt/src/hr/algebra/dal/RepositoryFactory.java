@@ -18,7 +18,7 @@ public class RepositoryFactory {
     private RepositoryFactory() {
     }
     
-    public static MovieRepository getMovieRepository() throws Exception {
+    public static MovieRepository getMovieRepository(){
         return new MovieSqlRepository();
     }
         public static UserRepository getUserRepository() {

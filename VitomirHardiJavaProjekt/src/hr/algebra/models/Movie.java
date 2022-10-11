@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package hr.algebra.model;
+package hr.algebra.models;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -114,6 +114,18 @@ public class Movie {
     public void addActor(Actor actor) {
         actors.add(actor);
     }
+    public void addActors(List<Actor> actorsList){
+        this.actors.addAll(actorsList);
+    }
+    
+    public void addDirectors(List<Director> directorsList) {
+        this.directors.addAll(directorsList);
+    }
+    
+    public void addGenres(List<Genre> genresList){
+        this.genres.addAll(genresList);
+    }
+    
 
     public int getDuration() {
         return duration;
@@ -176,5 +188,7 @@ public class Movie {
         return title;
 //return super.toString(); //To change body of generated methods, choose Tools | Templates.
     }
+
+    
 
 }

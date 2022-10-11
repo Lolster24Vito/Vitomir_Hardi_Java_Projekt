@@ -227,15 +227,55 @@ SELECT  [Id]
   FROM [MoviesJavaVH].[dbo].GENRE
   GO
 
+  /* DELETE PLS */
   CREATE OR ALTER PROCEDURE SelectMovieActor
 AS
   SELECT  [Id]
       ,[MovieId]
       ,[ActorId]
   FROM [MoviesJavaVH].[dbo].[ActorMovie]
+
+GO
+
+
+    CREATE OR ALTER PROCEDURE SelectActorsInMovie
+		@MovieId int
+AS
+  SELECT  am.Id,am.ActorId,am.MovieId,a.Name
+  FROM  [MoviesJavaVH].[dbo].[ActorMovie] as am
+  INNER JOIN Actor as a on a.Id=am.ActorId
+  where am.MovieId=@MovieId
   
+
+
   GO
 
+      CREATE OR ALTER PROCEDURE SelectDirectorsInMovie
+		@MovieId int
+AS
+  SELECT  dm.Id,dm.DirectorId,dm.MovieId,d.Name
+  FROM  [MoviesJavaVH].[dbo].[DirectorMovie] as dm
+  INNER JOIN DIRECTOR as d on d.Id=dm.DirectorId
+  where dm.MovieId=@MovieId
+  
+
+
+  GO
+
+  
+      CREATE OR ALTER PROCEDURE SelectGenresInMovie
+		@MovieId int
+AS
+  SELECT  gm.Id,gm.GenreId,gm.MovieId,g.Name
+  FROM  [MoviesJavaVH].[dbo].GenreMovie as gm
+  INNER JOIN GENRE as g on g.Id=gm.GenreId
+  where gm.MovieId=@MovieId
+  
+
+
+  GO
+
+  /*DELETE PLS*/
 
   CREATE OR ALTER PROCEDURE SelectMovieDirector
 AS
@@ -246,7 +286,7 @@ AS
 
   GO
 
-  
+  /*DELETE PLS*/
   CREATE OR ALTER PROCEDURE SelectMovieGenre
 AS
 SELECT  [Id]
@@ -306,6 +346,17 @@ as
 SELECT *
   FROM [dbo].[Users]
   where Username=@username AND PasswordHash=@passwordHash
+
+
+  GO
+CREATE OR ALTER PROCEDURE SelectMoviesFromActor
+		@ActorId int
+AS
+  SELECT  am.Id,am.ActorId,am.MovieId,m.Title
+  FROM  [MoviesJavaVH].[dbo].[ActorMovie] as am
+  INNER JOIN Movie as m on m.Id=am.MovieId
+  where am.ActorId=@ActorId
+  
 
 
 /*ovdje stao*/

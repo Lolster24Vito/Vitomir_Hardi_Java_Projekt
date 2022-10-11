@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package hr.algebra.model;
+package hr.algebra.models;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -53,13 +54,23 @@ public class MovieArchive {
     public void setActors(Set<Actor> actors) {
         this.actors = actors;
     }
-
-    public void setDirectors(Set<Director> directors) {
-        this.directors = directors;
+        public void setDirectors(Set<Director> directors) {
+        this.directors=directors;
+    }
+            public void setGenres(Set<Genre> genres) {
+        this.genres=genres;
+    }
+    
+    public void addActors(Collection<Actor> actors){
+    this.actors.addAll(actors);
     }
 
-    public void setGenres(Set<Genre> genres) {
-        this.genres = genres;
+    public void addDirectors(Collection<Director> directors) {
+        this.directors.addAll(directors);
+    }
+
+    public void addGenres(Collection<Genre> genres) {
+        this.genres.addAll(genres);
     }
     
 

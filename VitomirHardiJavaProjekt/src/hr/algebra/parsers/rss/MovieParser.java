@@ -7,11 +7,11 @@ package hr.algebra.parsers.rss;
 
 import hr.algebra.factory.ParserFactory;
 import hr.algebra.factory.UrlConnectionFactory;
-import hr.algebra.model.Actor;
-import hr.algebra.model.Director;
-import hr.algebra.model.Genre;
-import hr.algebra.model.Movie;
-import hr.algebra.model.MovieArchive;
+import hr.algebra.models.Actor;
+import hr.algebra.models.Director;
+import hr.algebra.models.Genre;
+import hr.algebra.models.Movie;
+import hr.algebra.models.MovieArchive;
 import hr.algebra.utils.FileUtils;
 import hr.algebra.utils.StringHelperUtils;
 import hr.algebra.utils.StringHtmlTagUtil;
@@ -56,6 +56,8 @@ public class MovieParser {
    //https://web.archive.org/web/20220122021902if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1
         //private static final String RSS_URL = "https://web.archive.org/web/20220122021902if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1";
 private static final String RSS_URL = "https://web.archive.org/web/20211018134319if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1";
+private static final String IMAGE_SITE="https://slike3.blitz-cinestar.hr/Plakati/";
+
     private static final String ATTRIBUTE_URL = "url";
     private static final String EXT = ".jpg";
     private static final String DIR = "assets/moviePosters";
@@ -218,12 +220,21 @@ private static final String RSS_URL = "https://web.archive.org/web/2021101813431
                 ext = EXT;
             }
 String pictureNameExtension = pictureUrl.substring( pictureUrl.lastIndexOf('/')+1, pictureUrl.length() );
-String pictureName = pictureNameExtension.substring(19, pictureNameExtension.lastIndexOf('.'))+EXT;
 
+String[] parts=pictureNameExtension.split("_");
+         String pictureName="";
+         for(int i=4;i<parts.length;i++){
+             if(i!=4)pictureName+="_";
+             pictureName+=parts[i];
+         }
+
+
+//String pictureName = pictureNameExtension.substring(19, pictureNameExtension.lastIndexOf('.'))+EXT;
+String workingPictureURL=IMAGE_SITE+pictureNameExtension;
 //String pictureName = UUID.randomUUID() + ext;
             String localPicturePath = DIR + File.separator + pictureName;
 
-            FileUtils.copyFromUrl(pictureUrl, localPicturePath);
+            FileUtils.copyFromUrl(workingPictureURL, localPicturePath);
             movie.setPosterPath(localPicturePath);
         } catch (IOException ex) {
             Logger.getLogger(MovieParser.class.getName()).log(Level.SEVERE, null, ex);

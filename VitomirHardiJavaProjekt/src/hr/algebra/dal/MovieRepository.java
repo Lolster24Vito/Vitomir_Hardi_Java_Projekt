@@ -5,10 +5,16 @@
  */
 package hr.algebra.dal;
 
-import hr.algebra.model.Movie;
-import hr.algebra.model.MovieArchive;
+import hr.algebra.models.Actor;
+import hr.algebra.models.Director;
+import hr.algebra.models.GenericDbEntity;
+import hr.algebra.models.Genre;
+import hr.algebra.models.Movie;
+import hr.algebra.models.MovieArchive;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  *
@@ -23,6 +29,20 @@ public interface MovieRepository {
     void setMovieDirectors(Movie movie) throws Exception ;
     void setMovieGenres(Movie movie) throws Exception ;
     void deleteAllData() throws Exception;
+     Set<Actor> getActors() throws SQLException;
+          Set<Director> getDirectors() throws SQLException ;
+     Set<Genre> getGenres() throws SQLException;
+List<Movie> getMovies() throws SQLException;
+
+    List<Actor> getActorsInMovie(int movieId) throws SQLException;
+    List<Director> getDirectorsInMovie(int movieId) throws SQLException;
+    List<Genre> getGenresInMovie(int movieId) throws SQLException;
+    
+    List<GenericDbEntity> getMoviesOfActor(int actorId) throws SQLException;
+    Movie getMovie(int movieId) throws SQLException;
+
+
+
     MovieArchive getMovieData() throws Exception;
     //void updateArticle(int id, Article data) throws Exception;
    // void deleteArticle(int id) throws Exception;

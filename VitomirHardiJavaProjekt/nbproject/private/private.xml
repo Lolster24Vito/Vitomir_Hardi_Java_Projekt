@@ -3,12 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/dal/UserRepository.java</file>
-            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/dal/sql/DataSourceSingleton.java</file>
-            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/dal/sql/UserSqlRepository.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/models/GenericDbEntity.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/UserFrame.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/dal/MovieRepository.java</file>
             <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/dal/sql/MovieSqlRepository.java</file>
-            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/view/RegisterPanel.java</file>
-            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/view/LoginPanel.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/view/UserActorPanel.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/TestFrameDelete.java</file>
         </group>
     </open-files>
 </project-private>

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package hr.algebra.model;
+package hr.algebra.models;
 
 import java.util.Objects;
 
@@ -12,14 +12,14 @@ import java.util.Objects;
  * @author vitom
  */
 public class Generic2ForeignKeyDB {
-    public int MovieId;
-    public int ForeignKeyId;
-    public String Name;
+    public int movieId;
+    public int foreignKeyId;
+    public String name;
 
     public Generic2ForeignKeyDB(int MovieId, int ForeignKeyId, String Name) {
-        this.MovieId = MovieId;
-        this.ForeignKeyId = ForeignKeyId;
-        this.Name = Name;
+        this.movieId = MovieId;
+        this.foreignKeyId = ForeignKeyId;
+        this.name = Name;
     }
 
     

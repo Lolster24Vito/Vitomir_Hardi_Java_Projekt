@@ -6,8 +6,8 @@
 package hr.algebra;
 
 import hr.algebra.dal.RepositoryFactory;
-import hr.algebra.model.Movie;
-import hr.algebra.model.MovieArchive;
+import hr.algebra.models.Movie;
+import hr.algebra.models.MovieArchive;
 import hr.algebra.parsers.rss.MovieParser;
 import java.io.IOException;
 import java.text.ParseException;
@@ -30,12 +30,10 @@ public class AdminPrototype extends javax.swing.JFrame {
     private MovieRepository repository;
 
     public AdminPrototype() {
-        try {
+       
             initComponents();
             init();
-        } catch (Exception ex) {
-            Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
     }
 
     /**
@@ -132,7 +130,7 @@ public class AdminPrototype extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnDeleteAllActionPerformed
 
-      private void init() throws Exception {
+      private void init()  {
      repository = RepositoryFactory.getMovieRepository();
 
     }

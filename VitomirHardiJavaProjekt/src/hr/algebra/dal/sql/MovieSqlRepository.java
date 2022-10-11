@@ -5,12 +5,12 @@
  */
 package hr.algebra.dal.sql;
 
-import hr.algebra.model.Actor;
-import hr.algebra.model.Director;
-import hr.algebra.model.Generic2ForeignKeyDB;
-import hr.algebra.model.Genre;
-import hr.algebra.model.Movie;
-import hr.algebra.model.MovieArchive;
+import hr.algebra.models.Actor;
+import hr.algebra.models.Director;
+import hr.algebra.models.Generic2ForeignKeyDB;
+import hr.algebra.models.Genre;
+import hr.algebra.models.Movie;
+import hr.algebra.models.MovieArchive;
 import hr.algebra.utils.FileUtils;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -32,6 +32,9 @@ import java.util.Set;
 import java.util.stream.IntStream;
 import javax.sql.DataSource;
 import hr.algebra.dal.MovieRepository;
+import hr.algebra.models.GenericDbEntity;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -55,11 +58,9 @@ public class MovieSqlRepository implements MovieRepository {
     private static final String NAME = "name";
 
     private static final String MOVIE_ID = "MovieId";
-    private static final String ACTOR_ID = "ActorId";    
+    private static final String ACTOR_ID = "ActorId";
     private static final String DIRECTOR_ID = "DirectorId";
     private static final String GENRE_ID = "GenreId";
-
-
 
     private static final String CREATE_MOVIE = "{ CALL createMovie (?,?,?,?,?,?,?,?,?) }";
 
@@ -67,10 +68,15 @@ public class MovieSqlRepository implements MovieRepository {
     private static final String SET_MOVIE_DIRECTOR = "{ CALL SetMovieDirector (?,?) }";
     private static final String SET_MOVIE_GENRE = "{ CALL SetMovieGenre (?,?) }";
     private static final String SELECT_MOVIES = "{ CALL SelectMovies () }";
+    private static final String SELECT_ACTORS_IN_MOVIE = "{ CALL SelectActorsInMovie (?) }";
+    private static final String SELECT_MOVIES_FROM_ACTOR = "{ CALL SelectMoviesFromActor (?) }";
+    private static final String SELECT_DIRECTORS_IN_MOVIE = "{ CALL SelectDirectorsInMovie (?) }";
+    private static final String SELECT_GENRES_IN_MOVIE = "{ CALL SelectGenresInMovie (?) }";
+
     private static final String SELECT_MOVIE_ACTOR = "{ CALL SelectMovieActor () }";
     private static final String SELECT_MOVIE_DIRECTOR = "{ CALL SelectMovieDirector () }";
-        private static final String SELECT_MOVIE_GENRE = "{ CALL SelectMovieGenre () }";
-
+    private static final String SELECT_MOVIE_GENRE = "{ CALL SelectMovieGenre () }";
+    private static final String GET_ACTOR_NAME = "{ CALL GetActorName(?) }";
 
     private static final String SELECT_ACTORS = "{ CALL SelectActors () }";
     private static final String SELECT_DIRECTORS = "{ CALL SelectDirectors () }";
@@ -210,110 +216,66 @@ public class MovieSqlRepository implements MovieRepository {
         MovieArchive movieArchive = new MovieArchive();
         DataSource dataSource = DataSourceSingleton.getInstance();
 
-        List<Movie> movies = getMovies(dataSource);
+        List<Movie> movies = getMovies();
+
+        movieArchive.setActors(getActors());
         
-        Map<Integer, String> actorsMap = new HashMap<>();
-        Map<Integer, String> directorsMap = new HashMap<>();
-        Map<Integer, String> genresMap = new HashMap<>();
 
-       
-        //get actors
-        actorsMap = getGenericDatabase(SELECT_ACTORS, dataSource);
-        Set<Actor> actorSet = new HashSet<>();
-        actorsMap.forEach((key, value) -> actorSet.add(new Actor(key, value)));
+        movieArchive.setDirectors(getDirectors());
 
-        movieArchive.setActors(actorSet);
-        //get directors
-        directorsMap = getGenericDatabase(SELECT_DIRECTORS, dataSource);
-        Set<Director> directorSet = new HashSet<>();
-        directorsMap.forEach((key, value) -> directorSet.add(new Director(key, value)));
-        movieArchive.setDirectors(directorSet);
-        //get genre
-        genresMap = getGenericDatabase(SELECT_GENRES, dataSource);
-        Set<Genre> genreSet = new HashSet<>();
-        genresMap.forEach((key, value) -> genreSet.add(new Genre(key, value)));
-        movieArchive.setGenres(genreSet);
+        movieArchive.setGenres(getGenres());
 
-        
-        /*
-        List<Generic2ForeignKeyDB> actorsInMovies = new ArrayList<>();
-        
-        try (Connection con = dataSource.getConnection();
-        CallableStatement stmt = con.prepareCall(SELECT_MOVIE_ACTOR);
-        ResultSet rs = stmt.executeQuery()) {
-        while (rs.next()) {
-        Generic2ForeignKeyDB item = new Generic2ForeignKeyDB(rs.getInt(MOVIE_ID), rs.getInt(ACTOR_ID), "");
-        actorsInMovies.add(item);
-        }
-        }*/
-        List<Generic2ForeignKeyDB> actorsInMovies = getGeneric2ForeignKeys(SELECT_MOVIE_ACTOR,ACTOR_ID,dataSource);
-        List<Generic2ForeignKeyDB> directorsInMovies = getGeneric2ForeignKeys(SELECT_MOVIE_DIRECTOR,DIRECTOR_ID,dataSource);
-        List<Generic2ForeignKeyDB> genresInMovies = getGeneric2ForeignKeys(SELECT_MOVIE_GENRE,GENRE_ID,dataSource);
+        for (Movie movie : movies) {
+            List<Actor> actorsInMovie = getActorsInMovie(movie.getId());
+            movie.addActors(actorsInMovie);
 
-        //set actors in movie class
-        for (Generic2ForeignKeyDB actorMovie : actorsInMovies) {
-            int listIndex = -1;
-            int i = 0;
-            //search movie id if it exists
-            for (Movie movie : movies) {
-                if (movie.getId() == actorMovie.MovieId) {
-                    listIndex = i;
-                    break;
-                }
-                i++;
-            }
-            if (listIndex != -1) {
-                movies.get(listIndex).addActor(new Actor(actorMovie.ForeignKeyId, actorsMap.get(actorMovie.ForeignKeyId)));
-            }
+            List<Director> directorsInMovie = getDirectorsInMovie(movie.getId());
+            movie.addDirectors(directorsInMovie);
+
+            List<Genre> genresInMovie = getGenresInMovie(movie.getId());
+            movie.addGenres(genresInMovie);
+
         }
-        //set directors in movie class
-        for (Generic2ForeignKeyDB directorMovie : directorsInMovies) {
-            int listIndex = -1;
-            int i = 0;
-            //search movie id if it exists
-            for (Movie movie : movies) {
-                if (movie.getId() == directorMovie.MovieId) {
-                    listIndex = i;
-                    break;
-                }
-                i++;
-            }
-            if (listIndex != -1) {
-                movies.get(listIndex).addDirector(new Director(directorMovie.ForeignKeyId, directorsMap.get(directorMovie.ForeignKeyId)));
-            }
-        }
-        //set genre in movie class
-                for (Generic2ForeignKeyDB genreMovie : genresInMovies) {
-            int listIndex = -1;
-            int i = 0;
-            //search movie id if it exists
-            for (Movie movie : movies) {
-                if (movie.getId() == genreMovie.MovieId) {
-                    listIndex = i;
-                    break;
-                }
-                i++;
-            }
-            if (listIndex != -1) {
-                movies.get(listIndex).addGenre(new Genre(genreMovie.ForeignKeyId, genresMap.get(genreMovie.ForeignKeyId)));
-            }
-        }
-           
+
         movieArchive.setMovies(movies);
 
-        // movieArchive.getMovies().get(0).
-        //TODO napravi
         return movieArchive;
     }
 
-    public List<Movie> getMovies(DataSource dataSource) throws SQLException {
+    @Override
+    public Set<Actor> getActors() throws SQLException {
+        List<GenericDbEntity> actorsGeneric = getGenericDatabase(SELECT_ACTORS);
+        Set<Actor> actorSet = new HashSet<>();
+        actorsGeneric.forEach(it -> actorSet.add(new Actor(it.getId(), it.getName())));
+        return actorSet;
+    }
+
+    @Override
+    public Set<Director> getDirectors() throws SQLException {
+        List<GenericDbEntity> actorsGeneric = getGenericDatabase(SELECT_DIRECTORS);
+        Set<Director> directorSet = new HashSet<>();
+        actorsGeneric.forEach(it -> directorSet.add(new Director(it.getId(), it.getName())));
+        return directorSet;
+    }
+
+    @Override
+    public Set<Genre> getGenres() throws SQLException {
+        List<GenericDbEntity> genresGeneric = getGenericDatabase(SELECT_GENRES);
+        Set<Genre> genreSet = new HashSet<>();
+        genresGeneric.forEach(it -> genreSet.add(new Genre(it.getId(), it.getName())));
+        return genreSet;
+    }
+
+    @Override
+    public List<Movie> getMovies() throws SQLException {
         //get movies
-                List<Movie> movies = new ArrayList<>();
+                DataSource dataSource = DataSourceSingleton.getInstance();
+        List<Movie> movies = new ArrayList<>();
 
         try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(SELECT_MOVIES);
                 ResultSet rs = stmt.executeQuery()) {
-            
+
             while (rs.next()) {
                 Movie movie = new Movie();
                 movie.setId(rs.getInt(ID_MOVIE));
@@ -326,9 +288,9 @@ public class MovieSqlRepository implements MovieRepository {
                 movie.setReleased(rs.getDate(RELEASED_DATE));
                 //publish date is a nvarchar in the SQL
                 movie.setPubDate(LocalDateTime.parse(rs.getString(PUBLISH_DATE)));
-                
+
                 movies.add(movie);
-                
+
                 /*  movies.add(new Movie{
                 rs.getInt(ID_MOVIE),
                 rs.getString(TITLE),
@@ -339,8 +301,35 @@ public class MovieSqlRepository implements MovieRepository {
             }
         }
         return movies;
-        //movieArchive.setMovies(movies);
     }
+//OLD (String procedureName,String foreignKeyColumnName, DataSource dataSource) throws SQLException
+    //NEW (String procedureName, String foreignKeyColumnName,String parameterName,int parameterValue,String returnColumnName)
+    
+    @Override
+    public List<Actor> getActorsInMovie(int movieId) throws SQLException {
+        List<Actor> actorsInMovie = new ArrayList<>();
+        List<Generic2ForeignKeyDB> objects = getGeneric2ForeignKeys(SELECT_ACTORS_IN_MOVIE, ACTOR_ID,MOVIE_ID, movieId, "Name");
+        objects.forEach(object -> actorsInMovie.add(new Actor(object.foreignKeyId, object.name)));
+        return actorsInMovie;
+    }
+
+    @Override
+    public List<Director> getDirectorsInMovie(int movieId) throws SQLException {
+        List<Director> directorsInMovie = new ArrayList<>();
+        List<Generic2ForeignKeyDB> objects = getGeneric2ForeignKeys(SELECT_DIRECTORS_IN_MOVIE, DIRECTOR_ID,MOVIE_ID, movieId,"Name");
+        objects.forEach(object -> directorsInMovie.add(new Director(object.foreignKeyId, object.name)));
+        return directorsInMovie;
+    }
+
+    @Override
+    public List<Genre> getGenresInMovie(int movieId) throws SQLException {
+        List<Genre> genresInMovies = new ArrayList<>();
+        List<Generic2ForeignKeyDB> objects = getGeneric2ForeignKeys(SELECT_GENRES_IN_MOVIE, GENRE_ID,MOVIE_ID,movieId,"Name");
+        objects.forEach(object -> genresInMovies.add(new Genre(object.foreignKeyId, object.name)));
+        return genresInMovies;
+    }
+
+  
 
     private Map<Integer, String> getGenericDatabase(String procedureName, DataSource dataSource) throws SQLException {
 
@@ -357,22 +346,62 @@ public class MovieSqlRepository implements MovieRepository {
         return items;
 
     }
-    private List<Generic2ForeignKeyDB> getGeneric2ForeignKeys(String procedureName,String foreignKeyColumnName, DataSource dataSource) throws SQLException{
-         
-        List<Generic2ForeignKeyDB> objectInMovies = new ArrayList<>();
 
+    private List<GenericDbEntity> getGenericDatabase(String procedureName) throws SQLException {
+
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        List<GenericDbEntity> items = new ArrayList<>();
         try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(procedureName);
                 ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
+                items.add(new GenericDbEntity(rs.getInt(ID_GENERIC), rs.getString(NAME)));
 
-                Generic2ForeignKeyDB item = new Generic2ForeignKeyDB(rs.getInt(MOVIE_ID), rs.getInt(foreignKeyColumnName), "");
+            }
+        }
+        return items;
+
+    }
+
+   
+
+    public List<Generic2ForeignKeyDB> getGeneric2ForeignKeys(String procedureName, String foreignKeyColumnName,String parameterName,int parameterValue,String returnColumnName) throws SQLException {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        List<Generic2ForeignKeyDB> objectInMovies = new ArrayList<>();
+
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(procedureName)) {
+            stmt.setInt("@"+parameterName, parameterValue);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+               // Generic2ForeignKeyDB item = new Generic2ForeignKeyDB(rs.getInt(MOVIE_ID), rs.getInt(foreignKeyColumnName), rs.getString("Name"));
+               Generic2ForeignKeyDB item = new Generic2ForeignKeyDB(rs.getInt(MOVIE_ID), rs.getInt(foreignKeyColumnName), rs.getString(returnColumnName));
+
                 objectInMovies.add(item);
 
             }
         }
         return objectInMovies;
+    }
+
+    @Override
+    public List<GenericDbEntity> getMoviesOfActor(int actorId) throws SQLException {
+        //SelectMoviesFromActor
+         List<GenericDbEntity> moviesOfActor = new ArrayList<>();
+         //(SELECT_MOVIES_FROM_ACTOR, ACTOR_ID,ACTOR_ID,);
+        List<Generic2ForeignKeyDB> objects = getGeneric2ForeignKeys(SELECT_MOVIES_FROM_ACTOR, ACTOR_ID, ACTOR_ID, actorId, TITLE);
+        //objects.forEach(object -> moviesOfActor.add(new Movie(object.movieId, object.name)));
+         objects.forEach(object -> moviesOfActor.add(new GenericDbEntity(object.movieId, object.name)));
+
+        return moviesOfActor;
+    }
+
+    @Override
+    public Movie getMovie(int movieId) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

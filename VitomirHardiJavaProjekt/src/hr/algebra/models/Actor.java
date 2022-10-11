@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package hr.algebra.model;
+package hr.algebra.models;
 
 import java.util.Objects;
 
@@ -11,21 +11,38 @@ import java.util.Objects;
  *
  * @author vitom
  */
-public class Genre {
+public class Actor {
 
-    public String getName() {
-        return name;
+
+    private int id;
+    private String name;
+
+    public Actor(String name) {
+        this.name = name.trim();
     }
 
-    public Genre(int id, String name) {
+    public Actor() {
+    }
+
+    public Actor(int id, String name) {
         this.id = id;
         this.name = name;
     }
-        private int id;
-    private String name;
 
-    public Genre(String name) {
-        this.name = name.trim();
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
     }
         @Override
 public int hashCode() {
@@ -43,10 +60,14 @@ public int hashCode() {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Genre other = (Genre) obj;
+        final Actor other = (Actor) obj;
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
         return true;
+    }
+        @Override
+    public String toString() {
+        return  getName();
     }
 }
