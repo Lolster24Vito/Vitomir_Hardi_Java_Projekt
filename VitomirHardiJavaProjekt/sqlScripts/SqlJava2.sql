@@ -357,6 +357,40 @@ AS
   INNER JOIN Movie as m on m.Id=am.MovieId
   where am.ActorId=@ActorId
   
+  GO
+
+  CREATE or ALTER PROCEDURE  CreateActorMovie
+		@MovieId int,
+		@ActorId int
+  as
+  
+INSERT INTO [dbo].[ActorMovie]
+           ([MovieId]
+           ,[ActorId])
+     VALUES
+           (@MovieId
+           ,@ActorId)
+GO
+  CREATE or ALTER PROCEDURE  CreateActor
+  	@name nvarchar(300)
+  as
+INSERT INTO [dbo].[Actor]
+           ([Name])
+     VALUES
+           (@name)
+GO
+
+ CREATE or ALTER PROCEDURE  UpdateActor
+	@ActorId int,
+  	@name nvarchar(300)
+  as
+
+UPDATE [dbo].[Actor]
+   SET [Name] = @name
+ WHERE Id=@ActorId
+GO
+
+
 
 
 /*ovdje stao*/

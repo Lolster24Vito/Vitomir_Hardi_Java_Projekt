@@ -22,6 +22,12 @@ public class Generic2ForeignKeyDB {
         this.name = Name;
     }
 
+    public Generic2ForeignKeyDB(int movieId, int foreignKeyId) {
+        this.movieId = movieId;
+        this.foreignKeyId = foreignKeyId;
+    }
+    
+
     
     
 }

@@ -50,6 +50,11 @@ public class Movie {
     public Movie() {
     }
 
+    public Movie(int id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -187,6 +192,9 @@ public class Movie {
     public String toString() {
         return title;
 //return super.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
+    public GenericDbEntity toGenericDbEntity(){
+        return new GenericDbEntity(id, title);
     }
 
     

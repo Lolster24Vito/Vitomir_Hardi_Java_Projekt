@@ -106,6 +106,7 @@ public class UserFrame extends javax.swing.JFrame {
 
     private void miSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miSaveActionPerformed
         // TODO add your handling code here:
+        
        
     }//GEN-LAST:event_miSaveActionPerformed
 
@@ -158,6 +159,7 @@ public class UserFrame extends javax.swing.JFrame {
     private void initTabs() {
         userActorPanel=new UserActorPanel(movies);
         tabPane.add("Actors",userActorPanel);
+        
         
     }
 

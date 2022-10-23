@@ -63,7 +63,10 @@ public class MovieSqlRepository implements MovieRepository {
     private static final String GENRE_ID = "GenreId";
 
     private static final String CREATE_MOVIE = "{ CALL createMovie (?,?,?,?,?,?,?,?,?) }";
+    private static final String CREATE_ACTORMOVIE = "{ CALL CreateActorMovie (?,?) }";
 
+    
+//CreateActorMovie
     private static final String SET_MOVIE_ACTOR = "{ CALL SetMovieActor (?,?) }";
     private static final String SET_MOVIE_DIRECTOR = "{ CALL SetMovieDirector (?,?) }";
     private static final String SET_MOVIE_GENRE = "{ CALL SetMovieGenre (?,?) }";
@@ -328,6 +331,8 @@ public class MovieSqlRepository implements MovieRepository {
         objects.forEach(object -> genresInMovies.add(new Genre(object.foreignKeyId, object.name)));
         return genresInMovies;
     }
+    
+    
 
   
 
@@ -388,19 +393,68 @@ public class MovieSqlRepository implements MovieRepository {
     }
 
     @Override
-    public List<GenericDbEntity> getMoviesOfActor(int actorId) throws SQLException {
+    public List<Movie> getMoviesOfActor(int actorId) throws SQLException {
         //SelectMoviesFromActor
-         List<GenericDbEntity> moviesOfActor = new ArrayList<>();
+        //OLD List<GenericDbEntity> moviesOfActor = new ArrayList<>();
+        //NEW
+        List<Movie> moviesOfActor=new ArrayList<>();
          //(SELECT_MOVIES_FROM_ACTOR, ACTOR_ID,ACTOR_ID,);
         List<Generic2ForeignKeyDB> objects = getGeneric2ForeignKeys(SELECT_MOVIES_FROM_ACTOR, ACTOR_ID, ACTOR_ID, actorId, TITLE);
         //objects.forEach(object -> moviesOfActor.add(new Movie(object.movieId, object.name)));
-         objects.forEach(object -> moviesOfActor.add(new GenericDbEntity(object.movieId, object.name)));
+         objects.forEach(object -> moviesOfActor.add(new Movie(object.movieId, object.name)));
 
         return moviesOfActor;
     }
 
     @Override
     public Movie getMovie(int movieId) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addMoviesToActor(List<Generic2ForeignKeyDB> moviesActors) throws SQLException  {
+         DataSource dataSource = DataSourceSingleton.getInstance();
+          try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(CREATE_ACTORMOVIE)) {
+            for (Generic2ForeignKeyDB ma : moviesActors) {
+
+               
+                stmt.setInt("@" + MOVIE_ID, ma.movieId);
+                stmt.setInt("@" + ACTOR_ID,ma.foreignKeyId);
+                
+                stmt.executeUpdate();
+            }
+        }
+    }
+
+    //return int change TODO: VITO
+    @Override
+    public void createActor(String Name) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createGenre(Genre genre) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createDirector(Director director) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createActors(List<Actor> actors) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createGenres(List<Genre> genre) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void createDirectors(List<Director> director) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

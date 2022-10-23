@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,46 +9,74 @@ package hr.algebra.view;
 import hr.algebra.dal.MovieRepository;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.models.Actor;
+import hr.algebra.models.Generic2ForeignKeyDB;
 import hr.algebra.models.GenericDbEntity;
 import hr.algebra.models.Movie;
+import hr.algebra.models.transferables.ExportMovieTransferHandler;
+import hr.algebra.models.transferables.MovieTransferable;
+import hr.algebra.models.viewModels.Saveable;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.DropMode;
+import javax.swing.JComponent;
+import javax.swing.JList;
+import javax.swing.ListSelectionModel;
+import javax.swing.TransferHandler;
+import static javax.swing.TransferHandler.COPY;
 
 /**
  *
  * @author vitom
  */
-public class UserActorPanel extends javax.swing.JPanel {
+public class UserActorPanel extends javax.swing.JPanel implements Saveable {
 
     /**
      * Creates new form UserActorPanel
      */
+    //transfer drag and drog transfersupport samo int i preko dictionary-a ga nabaviti ili obicne list get
     private List<Movie> allMovies;
     private List<Actor> allActors;
-    private List<GenericDbEntity> moviesOfActor;
+    private List<Movie> moviesOfActor;
+    //added movies and actors
+    private List<Generic2ForeignKeyDB> moviesWithActorAdded = new ArrayList<>();
 
     private DefaultListModel<Movie> moviesModel;
-    private DefaultListModel<GenericDbEntity> actorMoviesModel;
+    private DefaultListModel<Movie> actorMoviesModel;
 
-         private DefaultListModel<Actor> actorsModel;
+    private DefaultListModel<Actor> actorsModel;
 
-         private Actor selectedActor=null;
+    private Actor selectedActor = null;
     private MovieRepository repository;
-
 
     public UserActorPanel(List<Movie> movies) {
         initComponents();
         allMovies = movies;
         init();
+        String test = getActorNameById(1001);
 
     }
 
     public void LoadActors() throws SQLException {
-            allActors=new ArrayList<>(repository.getActors());
+        allActors = new ArrayList<>(repository.getActors());
+    }
+
+    private String getActorNameById(int id) //throws Exception
+    {
+        Optional<Actor> findFirst = allActors.stream().filter(a -> a.getId() == id).findFirst();
+        if (findFirst.isPresent()) {
+            return findFirst.get().toString();
+        } else {
+            return "";
+        }
+        //throw new Exception("ActorNotFound");
     }
 
     /**
@@ -70,9 +99,9 @@ public class UserActorPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jListMoviesWithActor = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1200, 747));
 
@@ -95,14 +124,24 @@ public class UserActorPanel extends javax.swing.JPanel {
 
         jScrollPane3.setViewportView(jListMoviesWithActor);
 
-        jButton1.setText("Add");
+        btnAdd.setText("Add");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Update");
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
-        jButton3.setBackground(new java.awt.Color(204, 0, 51));
-        jButton3.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Delete");
+        btnDelete.setBackground(new java.awt.Color(204, 0, 51));
+        btnDelete.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Delete");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -129,7 +168,7 @@ public class UserActorPanel extends javax.swing.JPanel {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(78, 78, 78)
-                                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(50, 50, 50)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -140,9 +179,9 @@ public class UserActorPanel extends javax.swing.JPanel {
                                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(150, 150, 150)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(38, 38, 38)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(168, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -162,40 +201,52 @@ public class UserActorPanel extends javax.swing.JPanel {
                     .addComponent(jScrollPane3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(134, 134, 134))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jListAllActorsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListAllActorsMouseClicked
-          selectedActor=(Actor)jListAllActors.getSelectedValue();
-          if(selectedActor!=null){
-         tfActorName.setText(selectedActor.getName());
-         actorMoviesModel.clear();
-         jListMoviesWithActor.removeAll();
-              try {
-                  loadActorMovies(selectedActor.getId());
-              } catch (SQLException ex) {
-                  Logger.getLogger(UserActorPanel.class.getName()).log(Level.SEVERE, null, ex);
-              }
-         
-          }
+        selectedActor = (Actor) jListAllActors.getSelectedValue();
+        if (selectedActor != null) {
+            tfActorName.setText(selectedActor.getName());
+            actorMoviesModel.clear();
+            jListMoviesWithActor.removeAll();
+            try {
+                //only save shown result on page
+                moviesWithActorAdded.clear();
+                loadActorMovies(selectedActor.getId());
+            } catch (SQLException ex) {
+                Logger.getLogger(UserActorPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
     }//GEN-LAST:event_jListAllActorsMouseClicked
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+        saveChanges();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+            // TODO add your handling code here:
+            addActor();
+    }//GEN-LAST:event_btnAddActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JList<Actor> jListAllActors;
     private javax.swing.JList<Movie> jListAllMovies;
-    private javax.swing.JList<GenericDbEntity> jListMoviesWithActor;
+    private javax.swing.JList<Movie> jListMoviesWithActor;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -204,19 +255,20 @@ public class UserActorPanel extends javax.swing.JPanel {
 
     private void init() {
         repository = RepositoryFactory.getMovieRepository();
-                          actorsModel=new DefaultListModel<>(); 
+        actorsModel = new DefaultListModel<>();
         moviesModel = new DefaultListModel<>();
-        actorMoviesModel=new DefaultListModel<>();
+        actorMoviesModel = new DefaultListModel<>();
         try {
-                    
-                    LoadActors();
-                    
-                    } catch (SQLException ex) {
+
+            LoadActors();
+
+        } catch (SQLException ex) {
             Logger.getLogger(UserActorPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-         refreshActors();
+        initDragNDrop();
+        refreshActors();
         refreshMovies();
-        
+
     }
 
     private void refreshMovies() {
@@ -228,13 +280,74 @@ public class UserActorPanel extends javax.swing.JPanel {
 
     private void refreshActors() {
         actorsModel.clear();
-        allActors.forEach(actor->actorsModel.addElement(actor));
+        allActors.forEach(actor -> actorsModel.addElement(actor));
         jListAllActors.setModel(actorsModel);
     }
 
     private void loadActorMovies(int actorId) throws SQLException {
-         moviesOfActor = repository.getMoviesOfActor(actorId);
-        moviesOfActor.forEach(g->actorMoviesModel.addElement(g));
+        moviesOfActor = repository.getMoviesOfActor(actorId);
+        refreshActorMovies();
+
+    }
+
+    private void initDragNDrop() {
+        jListAllMovies.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jListAllMovies.setDragEnabled(true);
+        jListAllMovies.setTransferHandler(new ExportMovieTransferHandler(jListAllMovies));
+
+        jListMoviesWithActor.setDropMode(DropMode.ON);
+        jListMoviesWithActor.setTransferHandler(new ImportMovieActorsTransferHandler());
+
+    }
+
+    private void refreshActorMovies() {
+        actorMoviesModel.clear();
+        moviesOfActor.forEach(g -> actorMoviesModel.addElement(g));
         jListMoviesWithActor.setModel(actorMoviesModel);
     }
+
+    @Override
+    public void saveChanges() {
+
+        try {
+            //repository add,
+
+            //repository update changes to actor
+//update current selected movies
+            if (!moviesWithActorAdded.isEmpty()) {
+                repository.addMoviesToActor(moviesWithActorAdded);
+                moviesWithActorAdded.clear();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserActorPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void addActor() {
+        repository.Add
+    }
+
+    private class ImportMovieActorsTransferHandler extends TransferHandler {
+
+        @Override
+        public boolean canImport(TransferHandler.TransferSupport support) {
+            return support.isDataFlavorSupported(MovieTransferable.MOVIE_FLAVOR);
+        }
+
+        @Override
+        public boolean importData(TransferHandler.TransferSupport support) {
+            Transferable transferable = support.getTransferable();
+            try {
+                Movie add = (Movie) transferable.getTransferData(MovieTransferable.MOVIE_FLAVOR);
+                moviesOfActor.add(add);
+                moviesWithActorAdded.add(new Generic2ForeignKeyDB(add.getId(), selectedActor.getId()));
+                refreshActorMovies();
+
+            } catch (UnsupportedFlavorException | IOException ex) {
+                Logger.getLogger(UserActorPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return false;
+        }
+    }
+
 }
