@@ -24,10 +24,10 @@ import java.util.Set;
 public interface MovieRepository {
 
     //Create
-    int createMovie(Movie movie) throws Exception;
-        void createActor(Actor actor) throws Exception;
-        void createGenre(Genre genre) throws Exception;
-    void createDirector(Director director) throws Exception;
+    int createMovie(Movie movie) throws SQLException;
+    void createActor(String name) throws SQLException;
+    void createGenre(String name) throws SQLException;
+    void createDirector(String name) throws SQLException;
 
     void createMovies(List<Movie> articles) throws Exception;
     void createActors(List<Actor> actors) throws Exception;

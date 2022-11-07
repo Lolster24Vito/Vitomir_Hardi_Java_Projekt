@@ -70,6 +70,7 @@ public class MovieSqlRepository implements MovieRepository {
     private static final String SET_MOVIE_ACTOR = "{ CALL SetMovieActor (?,?) }";
     private static final String SET_MOVIE_DIRECTOR = "{ CALL SetMovieDirector (?,?) }";
     private static final String SET_MOVIE_GENRE = "{ CALL SetMovieGenre (?,?) }";
+    
     private static final String SELECT_MOVIES = "{ CALL SelectMovies () }";
     private static final String SELECT_ACTORS_IN_MOVIE = "{ CALL SelectActorsInMovie (?) }";
     private static final String SELECT_MOVIES_FROM_ACTOR = "{ CALL SelectMoviesFromActor (?) }";
@@ -80,6 +81,8 @@ public class MovieSqlRepository implements MovieRepository {
     private static final String SELECT_MOVIE_DIRECTOR = "{ CALL SelectMovieDirector () }";
     private static final String SELECT_MOVIE_GENRE = "{ CALL SelectMovieGenre () }";
     private static final String GET_ACTOR_NAME = "{ CALL GetActorName(?) }";
+    
+    private static final String CREATE_ACTOR="{ CALL CreateActor (?) }";
 
     private static final String SELECT_ACTORS = "{ CALL SelectActors () }";
     private static final String SELECT_DIRECTORS = "{ CALL SelectDirectors () }";
@@ -90,7 +93,7 @@ public class MovieSqlRepository implements MovieRepository {
     private static final String POSTER_DIR = "assets/moviePosters";
 
     @Override
-    public int createMovie(Movie movie) throws Exception {
+    public int createMovie(Movie movie) throws SQLException {
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(CREATE_MOVIE)) {
@@ -429,32 +432,40 @@ public class MovieSqlRepository implements MovieRepository {
 
     //return int change TODO: VITO
     @Override
-    public void createActor(String Name) throws Exception {
+    public void createActor(String name) throws SQLException {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+          try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(CREATE_ACTOR)) {
+           
+                stmt.setString("@" + NAME,name);
+                
+                stmt.executeUpdate();
+            
+        }
+    }
+
+    @Override
+    public void createGenre(String name) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void createGenre(Genre genre) throws Exception {
+    public void createDirector(String name) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void createDirector(Director director) throws Exception {
+    public void createActors(List<Actor> actors) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void createActors(List<Actor> actors) throws Exception {
+    public void createGenres(List<Genre> genre) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void createGenres(List<Genre> genre) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createDirectors(List<Director> director) throws Exception {
+    public void createDirectors(List<Director> director) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

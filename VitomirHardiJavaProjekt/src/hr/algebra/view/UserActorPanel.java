@@ -14,7 +14,6 @@ import hr.algebra.models.GenericDbEntity;
 import hr.algebra.models.Movie;
 import hr.algebra.models.transferables.ExportMovieTransferHandler;
 import hr.algebra.models.transferables.MovieTransferable;
-import hr.algebra.models.viewModels.Saveable;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
@@ -36,7 +35,7 @@ import static javax.swing.TransferHandler.COPY;
  *
  * @author vitom
  */
-public class UserActorPanel extends javax.swing.JPanel implements Saveable {
+public class UserActorPanel extends javax.swing.JPanel  {
 
     /**
      * Creates new form UserActorPanel
@@ -287,7 +286,6 @@ public class UserActorPanel extends javax.swing.JPanel implements Saveable {
     private void loadActorMovies(int actorId) throws SQLException {
         moviesOfActor = repository.getMoviesOfActor(actorId);
         refreshActorMovies();
-
     }
 
     private void initDragNDrop() {
@@ -306,7 +304,7 @@ public class UserActorPanel extends javax.swing.JPanel implements Saveable {
         jListMoviesWithActor.setModel(actorMoviesModel);
     }
 
-    @Override
+   // @Override saveable interface
     public void saveChanges() {
 
         try {
@@ -324,7 +322,13 @@ public class UserActorPanel extends javax.swing.JPanel implements Saveable {
     }
 
     private void addActor() {
-        repository.Add
+        try {
+            String actorName=tfActorName.getText().trim();
+            repository.createActor(actorName);
+            actorsModel.addElement(new Actor(actorName));
+        } catch (SQLException ex) {
+            Logger.getLogger(UserActorPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private class ImportMovieActorsTransferHandler extends TransferHandler {

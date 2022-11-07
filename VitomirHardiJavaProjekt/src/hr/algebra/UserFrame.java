@@ -55,8 +55,6 @@ public class UserFrame extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         menuProfile = new javax.swing.JMenu();
         miLogOut = new javax.swing.JMenuItem();
-        menuFile = new javax.swing.JMenu();
-        miSave = new javax.swing.JMenuItem();
         menuDownload = new javax.swing.JMenu();
         miXMLDownload = new javax.swing.JMenuItem();
 
@@ -68,18 +66,6 @@ public class UserFrame extends javax.swing.JFrame {
         menuProfile.add(miLogOut);
 
         jMenuBar1.add(menuProfile);
-
-        menuFile.setText("File");
-
-        miSave.setText("Save changes to database");
-        miSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miSaveActionPerformed(evt);
-            }
-        });
-        menuFile.add(miSave);
-
-        jMenuBar1.add(menuFile);
 
         menuDownload.setText("Download");
 
@@ -103,12 +89,6 @@ public class UserFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void miSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miSaveActionPerformed
-        // TODO add your handling code here:
-        
-       
-    }//GEN-LAST:event_miSaveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -148,10 +128,8 @@ public class UserFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu menuDownload;
-    private javax.swing.JMenu menuFile;
     private javax.swing.JMenu menuProfile;
     private javax.swing.JMenuItem miLogOut;
-    private javax.swing.JMenuItem miSave;
     private javax.swing.JMenuItem miXMLDownload;
     private javax.swing.JTabbedPane tabPane;
     // End of variables declaration//GEN-END:variables
