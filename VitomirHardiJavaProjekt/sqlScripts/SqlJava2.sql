@@ -370,14 +370,21 @@ INSERT INTO [dbo].[ActorMovie]
      VALUES
            (@MovieId
            ,@ActorId)
+
+
+
 GO
   CREATE or ALTER PROCEDURE  CreateActor
-  	@name nvarchar(300)
+  	@name nvarchar(300),
+	@Id INT OUTPUT
+
   as
 INSERT INTO [dbo].[Actor]
            ([Name])
      VALUES
            (@name)
+		   		SET @Id = SCOPE_IDENTITY()
+
 GO
 
  CREATE or ALTER PROCEDURE  UpdateActor
@@ -391,7 +398,12 @@ UPDATE [dbo].[Actor]
 GO
 
 
+CREATE OR ALTER PROCEDURE DeleteActor
+@Id int
+as
+Delete from Actor  where Id=@Id
 
+GO
 
 /*ovdje stao*/
 

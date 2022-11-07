@@ -6,6 +6,7 @@
 package hr.algebra.view;
 
 import hr.algebra.AdminFrame;
+import hr.algebra.UserFrame;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.dal.UserRepository;
 import hr.algebra.utils.EncryptionUtils;
@@ -136,7 +137,10 @@ public class LoginPanel extends javax.swing.JPanel {
 
         }
                 if(loginState==2){
-                        lbErrorMessage.setText("User");
+                    //User
+                    UserFrame userFrame=new UserFrame();
+                        userFrame.show();
+                        SwingUtilities.getWindowAncestor(this).dispose();
 
         }
         

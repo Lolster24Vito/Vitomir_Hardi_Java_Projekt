@@ -141,6 +141,11 @@ public class UserActorPanel extends javax.swing.JPanel  {
         btnDelete.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
         btnDelete.setForeground(new java.awt.Color(255, 255, 255));
         btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -234,6 +239,10 @@ public class UserActorPanel extends javax.swing.JPanel  {
             addActor();
     }//GEN-LAST:event_btnAddActionPerformed
 
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        deleteActor();
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -324,8 +333,23 @@ public class UserActorPanel extends javax.swing.JPanel  {
     private void addActor() {
         try {
             String actorName=tfActorName.getText().trim();
-            repository.createActor(actorName);
-            actorsModel.addElement(new Actor(actorName));
+            int id=repository.createActor(actorName);
+            actorsModel.addElement(new Actor(id,actorName));
+            allActors.add(new Actor(id,actorName));
+            jListAllActors.setModel(actorsModel);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(UserActorPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void deleteActor() {
+        try {
+            Actor actor=selectedActor;
+            repository.deleteActor(actor.getId());
+            
+            allActors.removeIf(p->p.getId()==actor.getId());
+            actorsModel.removeElement(actor);
         } catch (SQLException ex) {
             Logger.getLogger(UserActorPanel.class.getName()).log(Level.SEVERE, null, ex);
         }

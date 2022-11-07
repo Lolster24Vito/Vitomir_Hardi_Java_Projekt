@@ -25,16 +25,17 @@ public interface MovieRepository {
 
     //Create
     int createMovie(Movie movie) throws SQLException;
-    void createActor(String name) throws SQLException;
-    void createGenre(String name) throws SQLException;
-    void createDirector(String name) throws SQLException;
+    int createActor(String name) throws SQLException;
+    int createGenre(String name) throws SQLException;
+    int createDirector(String name) throws SQLException;
 
     void createMovies(List<Movie> articles) throws Exception;
     void createActors(List<Actor> actors) throws Exception;
         void createGenres(List<Genre> genre) throws Exception;
     void createDirectors(List<Director> director) throws Exception;
 
-   // void createActor
+   // delete
+    void deleteActor(int id)throws SQLException;
 
     //select get
     Set<Actor> getActors() throws SQLException;
