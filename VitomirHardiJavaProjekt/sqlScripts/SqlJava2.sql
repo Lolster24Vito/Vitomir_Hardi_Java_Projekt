@@ -405,5 +405,13 @@ Delete from Actor  where Id=@Id
 
 GO
 
+
+CREATE OR ALTER PROCEDURE SelectMovie
+@Id int
+as
+select * from Movie where Id=@Id
+GO
+
+
 /*ovdje stao*/
 

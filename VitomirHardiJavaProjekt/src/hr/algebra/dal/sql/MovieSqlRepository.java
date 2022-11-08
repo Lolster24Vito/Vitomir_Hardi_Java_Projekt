@@ -33,6 +33,7 @@ import java.util.stream.IntStream;
 import javax.sql.DataSource;
 import hr.algebra.dal.MovieRepository;
 import hr.algebra.models.GenericDbEntity;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,14 +65,14 @@ public class MovieSqlRepository implements MovieRepository {
 
     private static final String CREATE_MOVIE = "{ CALL createMovie (?,?,?,?,?,?,?,?,?) }";
     private static final String CREATE_ACTORMOVIE = "{ CALL CreateActorMovie (?,?) }";
-    private static final String CREATE_ACTOR="{ CALL CreateActor (?,?) }";
+    private static final String CREATE_ACTOR = "{ CALL CreateActor (?,?) }";
 
-    
 //CreateActorMovie
     private static final String SET_MOVIE_ACTOR = "{ CALL SetMovieActor (?,?) }";
     private static final String SET_MOVIE_DIRECTOR = "{ CALL SetMovieDirector (?,?) }";
     private static final String SET_MOVIE_GENRE = "{ CALL SetMovieGenre (?,?) }";
-    
+
+    private static final String SELECT_MOVIE = "{ CALL SelectMovie (?) }";
     private static final String SELECT_MOVIES = "{ CALL SelectMovies () }";
     private static final String SELECT_ACTORS_IN_MOVIE = "{ CALL SelectActorsInMovie (?) }";
     private static final String SELECT_MOVIES_FROM_ACTOR = "{ CALL SelectMoviesFromActor (?) }";
@@ -82,9 +83,7 @@ public class MovieSqlRepository implements MovieRepository {
     private static final String SELECT_MOVIE_DIRECTOR = "{ CALL SelectMovieDirector () }";
     private static final String SELECT_MOVIE_GENRE = "{ CALL SelectMovieGenre () }";
     private static final String GET_ACTOR_NAME = "{ CALL GetActorName(?) }";
-        private static final String DELETE_ACTOR = "{ CALL DeleteActor(?) }";
-
-    
+    private static final String DELETE_ACTOR = "{ CALL DeleteActor(?) }";
 
     private static final String SELECT_ACTORS = "{ CALL SelectActors () }";
     private static final String SELECT_DIRECTORS = "{ CALL SelectDirectors () }";
@@ -227,7 +226,6 @@ public class MovieSqlRepository implements MovieRepository {
         List<Movie> movies = getMovies();
 
         movieArchive.setActors(getActors());
-        
 
         movieArchive.setDirectors(getDirectors());
 
@@ -277,7 +275,7 @@ public class MovieSqlRepository implements MovieRepository {
     @Override
     public List<Movie> getMovies() throws SQLException {
         //get movies
-                DataSource dataSource = DataSourceSingleton.getInstance();
+        DataSource dataSource = DataSourceSingleton.getInstance();
         List<Movie> movies = new ArrayList<>();
 
         try (Connection con = dataSource.getConnection();
@@ -312,11 +310,11 @@ public class MovieSqlRepository implements MovieRepository {
     }
 //OLD (String procedureName,String foreignKeyColumnName, DataSource dataSource) throws SQLException
     //NEW (String procedureName, String foreignKeyColumnName,String parameterName,int parameterValue,String returnColumnName)
-    
+
     @Override
     public List<Actor> getActorsInMovie(int movieId) throws SQLException {
         List<Actor> actorsInMovie = new ArrayList<>();
-        List<Generic2ForeignKeyDB> objects = getGeneric2ForeignKeys(SELECT_ACTORS_IN_MOVIE, ACTOR_ID,MOVIE_ID, movieId, "Name");
+        List<Generic2ForeignKeyDB> objects = getGeneric2ForeignKeys(SELECT_ACTORS_IN_MOVIE, ACTOR_ID, MOVIE_ID, movieId, "Name");
         objects.forEach(object -> actorsInMovie.add(new Actor(object.foreignKeyId, object.name)));
         return actorsInMovie;
     }
@@ -324,7 +322,7 @@ public class MovieSqlRepository implements MovieRepository {
     @Override
     public List<Director> getDirectorsInMovie(int movieId) throws SQLException {
         List<Director> directorsInMovie = new ArrayList<>();
-        List<Generic2ForeignKeyDB> objects = getGeneric2ForeignKeys(SELECT_DIRECTORS_IN_MOVIE, DIRECTOR_ID,MOVIE_ID, movieId,"Name");
+        List<Generic2ForeignKeyDB> objects = getGeneric2ForeignKeys(SELECT_DIRECTORS_IN_MOVIE, DIRECTOR_ID, MOVIE_ID, movieId, "Name");
         objects.forEach(object -> directorsInMovie.add(new Director(object.foreignKeyId, object.name)));
         return directorsInMovie;
     }
@@ -332,14 +330,10 @@ public class MovieSqlRepository implements MovieRepository {
     @Override
     public List<Genre> getGenresInMovie(int movieId) throws SQLException {
         List<Genre> genresInMovies = new ArrayList<>();
-        List<Generic2ForeignKeyDB> objects = getGeneric2ForeignKeys(SELECT_GENRES_IN_MOVIE, GENRE_ID,MOVIE_ID,movieId,"Name");
+        List<Generic2ForeignKeyDB> objects = getGeneric2ForeignKeys(SELECT_GENRES_IN_MOVIE, GENRE_ID, MOVIE_ID, movieId, "Name");
         objects.forEach(object -> genresInMovies.add(new Genre(object.foreignKeyId, object.name)));
         return genresInMovies;
     }
-    
-    
-
-  
 
     private Map<Integer, String> getGenericDatabase(String procedureName, DataSource dataSource) throws SQLException {
 
@@ -374,21 +368,19 @@ public class MovieSqlRepository implements MovieRepository {
 
     }
 
-   
-
-    public List<Generic2ForeignKeyDB> getGeneric2ForeignKeys(String procedureName, String foreignKeyColumnName,String parameterName,int parameterValue,String returnColumnName) throws SQLException {
+    public List<Generic2ForeignKeyDB> getGeneric2ForeignKeys(String procedureName, String foreignKeyColumnName, String parameterName, int parameterValue, String returnColumnName) throws SQLException {
         DataSource dataSource = DataSourceSingleton.getInstance();
         List<Generic2ForeignKeyDB> objectInMovies = new ArrayList<>();
 
         try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(procedureName)) {
-            stmt.setInt("@"+parameterName, parameterValue);
+            stmt.setInt("@" + parameterName, parameterValue);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
 
-               // Generic2ForeignKeyDB item = new Generic2ForeignKeyDB(rs.getInt(MOVIE_ID), rs.getInt(foreignKeyColumnName), rs.getString("Name"));
-               Generic2ForeignKeyDB item = new Generic2ForeignKeyDB(rs.getInt(MOVIE_ID), rs.getInt(foreignKeyColumnName), rs.getString(returnColumnName));
+                // Generic2ForeignKeyDB item = new Generic2ForeignKeyDB(rs.getInt(MOVIE_ID), rs.getInt(foreignKeyColumnName), rs.getString("Name"));
+                Generic2ForeignKeyDB item = new Generic2ForeignKeyDB(rs.getInt(MOVIE_ID), rs.getInt(foreignKeyColumnName), rs.getString(returnColumnName));
 
                 objectInMovies.add(item);
 
@@ -402,31 +394,56 @@ public class MovieSqlRepository implements MovieRepository {
         //SelectMoviesFromActor
         //OLD List<GenericDbEntity> moviesOfActor = new ArrayList<>();
         //NEW
-        List<Movie> moviesOfActor=new ArrayList<>();
-         //(SELECT_MOVIES_FROM_ACTOR, ACTOR_ID,ACTOR_ID,);
+        List<Movie> moviesOfActor = new ArrayList<>();
+        //(SELECT_MOVIES_FROM_ACTOR, ACTOR_ID,ACTOR_ID,);
         List<Generic2ForeignKeyDB> objects = getGeneric2ForeignKeys(SELECT_MOVIES_FROM_ACTOR, ACTOR_ID, ACTOR_ID, actorId, TITLE);
         //objects.forEach(object -> moviesOfActor.add(new Movie(object.movieId, object.name)));
-         objects.forEach(object -> moviesOfActor.add(new Movie(object.movieId, object.name)));
+        objects.forEach(object -> moviesOfActor.add(new Movie(object.movieId, object.name)));
 
         return moviesOfActor;
     }
 
     @Override
-    public Movie getMovie(int movieId) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Optional<Movie> getMovie(int movieId) throws SQLException {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(SELECT_MOVIE)) {
+            stmt.setInt("@" + ID_GENERIC, movieId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Movie movie = new Movie();
+                    movie.setId(rs.getInt(ID_MOVIE));
+                    movie.setTitle(rs.getString(TITLE));
+                    movie.setDescription(rs.getString(DESCRIPTION));
+                    movie.setOriginalName(rs.getString(ORIGINAL_NAME));
+                    movie.setDuration(rs.getInt(DURATION));
+                    movie.setPosterPath(rs.getString(POSTER_PATH));
+                    movie.setLink(rs.getString(LINK));
+                    movie.setReleased(rs.getDate(RELEASED_DATE));
+                    //publish date is a nvarchar in the SQL
+                    movie.setPubDate(LocalDateTime.parse(rs.getString(PUBLISH_DATE)));
+                    return Optional.of(movie);
+                } else {
+                    return Optional.empty();
+                }
+
+            }
+
+        }
     }
 
     @Override
-    public void addMoviesToActor(List<Generic2ForeignKeyDB> moviesActors) throws SQLException  {
-         DataSource dataSource = DataSourceSingleton.getInstance();
-          try (Connection con = dataSource.getConnection();
+    public void addMoviesToActor(List<Generic2ForeignKeyDB> moviesActors) throws SQLException {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(CREATE_ACTORMOVIE)) {
             for (Generic2ForeignKeyDB ma : moviesActors) {
 
-               
                 stmt.setInt("@" + MOVIE_ID, ma.movieId);
-                stmt.setInt("@" + ACTOR_ID,ma.foreignKeyId);
-                
+                stmt.setInt("@" + ACTOR_ID, ma.foreignKeyId);
+
                 stmt.executeUpdate();
             }
         }
@@ -436,19 +453,18 @@ public class MovieSqlRepository implements MovieRepository {
     @Override
     public int createActor(String name) throws SQLException {
         DataSource dataSource = DataSourceSingleton.getInstance();
-          try (Connection con = dataSource.getConnection();
+        try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(CREATE_ACTOR)) {
-           
-                stmt.setString("@" + NAME,name);
-                stmt.registerOutParameter("@" + ID_GENERIC, Types.INTEGER);
 
-                stmt.executeUpdate();
-                            int insertedId = stmt.getInt("@" + ID_GENERIC);
+            stmt.setString("@" + NAME, name);
+            stmt.registerOutParameter("@" + ID_GENERIC, Types.INTEGER);
+
+            stmt.executeUpdate();
+            int insertedId = stmt.getInt("@" + ID_GENERIC);
             return insertedId;
 
-            
         }
-          
+
     }
 
     @Override
@@ -479,15 +495,13 @@ public class MovieSqlRepository implements MovieRepository {
     @Override
     public void deleteActor(int Id) throws SQLException {
         DataSource dataSource = DataSourceSingleton.getInstance();
-          try (Connection con = dataSource.getConnection();
+        try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(DELETE_ACTOR)) {
-           
-                stmt.setInt("@" + ID_GENERIC,Id);
 
-                stmt.executeUpdate();
-                           
+            stmt.setInt("@" + ID_GENERIC, Id);
 
-            
+            stmt.executeUpdate();
+
         }
     }
 

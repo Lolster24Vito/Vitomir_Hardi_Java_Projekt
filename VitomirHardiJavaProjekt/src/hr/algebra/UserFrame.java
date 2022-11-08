@@ -9,6 +9,7 @@ import hr.algebra.dal.MovieRepository;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.models.Movie;
 import hr.algebra.view.UserActorPanel;
+import hr.algebra.view.UserMoviePanel;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,6 +28,7 @@ public class UserFrame extends javax.swing.JFrame {
      private MovieRepository repository;
 
     UserActorPanel userActorPanel;
+    UserMoviePanel userMoviePanel;
     private DefaultListModel<String> moviesModel; 
 
     
@@ -136,8 +138,9 @@ public class UserFrame extends javax.swing.JFrame {
 
     private void initTabs() {
         userActorPanel=new UserActorPanel(movies);
+        userMoviePanel=new UserMoviePanel(movies);
         tabPane.add("Actors",userActorPanel);
-        
+        tabPane.add("Movies",userMoviePanel);
         
     }
 

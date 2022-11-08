@@ -72,7 +72,7 @@ public interface MovieRepository {
     void deleteAllData() throws Exception;
 
   
-    Movie getMovie(int movieId) throws SQLException;
+    Optional<Movie> getMovie(int movieId) throws SQLException;
 
     MovieArchive getMovieData() throws Exception;
     //void updateArticle(int id, Article data) throws Exception;
