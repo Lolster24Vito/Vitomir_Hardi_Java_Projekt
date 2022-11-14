@@ -27,6 +27,12 @@ public class Director {
     public Director(String name) {
         this.name = name.trim();
     }
+
+    @Override
+    public String toString() {
+        return name; //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
     @Override
 public int hashCode() {
@@ -52,3 +58,4 @@ public int hashCode() {
     }
     
 }
+

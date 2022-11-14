@@ -7,6 +7,7 @@ package hr.algebra.models;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -64,6 +65,9 @@ public class MovieArchive {
     public void addActors(Collection<Actor> actors){
     this.actors.addAll(actors);
     }
+    public void addActor(Actor actor){
+        this.actors.add(actor);
+    }
 
     public void addDirectors(Collection<Director> directors) {
         this.directors.addAll(directors);
@@ -71,6 +75,15 @@ public class MovieArchive {
 
     public void addGenres(Collection<Genre> genres) {
         this.genres.addAll(genres);
+    }
+    public Optional<Movie> getMovie(int movieId){
+        Optional<Movie> movie=movies.stream().filter(m->m.getId()==movieId).findFirst();
+        return movie;
+        /*
+        Optional<Person> matchingObject = objects.stream().
+    filter(p -> p.email().equals("testemail")).
+    findFirst();
+        */
     }
     
 

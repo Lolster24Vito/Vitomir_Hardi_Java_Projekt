@@ -36,7 +36,7 @@ public interface MovieRepository {
 
    // delete
     void deleteActor(int id)throws SQLException;
-
+void deleteMovie(int Id) throws Exception ;
     //select get
     Set<Actor> getActors() throws SQLException;
 
@@ -81,4 +81,6 @@ public interface MovieRepository {
     // List<Article> selectArticles() throws Exception;
 
     public void addMoviesToActor(List<Generic2ForeignKeyDB> moviesWithActorAdded) throws SQLException;
+
+    public void updateMovie(Movie updatedMovie) throws Exception;
 }

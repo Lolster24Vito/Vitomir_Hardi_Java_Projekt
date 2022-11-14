@@ -47,12 +47,20 @@ public class Movie {
         this.released = released;
     }
 
+
     public Movie() {
     }
 
     public Movie(int id, String title) {
         this.id = id;
         this.title = title;
+    }
+
+    public Movie(String title, List<Actor> addedMovieActors, List<Director> addedMovieDirectors, List<Genre> addedMovieGenre) {
+       this.title=title;
+        addActors(addedMovieActors);
+        addDirectors(addedMovieDirectors);
+        addGenres(addedMovieGenre);
     }
 
     public String getTitle() {

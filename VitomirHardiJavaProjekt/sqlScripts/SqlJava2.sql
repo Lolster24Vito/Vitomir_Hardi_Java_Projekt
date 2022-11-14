@@ -401,7 +401,19 @@ GO
 CREATE OR ALTER PROCEDURE DeleteActor
 @Id int
 as
+DELETE from ActorMovie where ActorId=@Id
 Delete from Actor  where Id=@Id
+
+
+GO
+
+CREATE OR ALTER PROCEDURE DeleteMovie
+@Id int
+as
+DELETE from ActorMovie where MovieId=@Id
+DELETE FROM GenreMovie WHERE MovieId=@Id
+DELETE FROM DirectorMovie WHERE MovieId=@Id
+Delete from Movie  where Id=@Id
 
 GO
 
@@ -413,5 +425,30 @@ select * from Movie where Id=@Id
 GO
 
 
+CREATE OR ALTER PROCEDURE UpdateMovie
+		@Id INT ,
+		@Title NVARCHAR(300),
+		@PublishDate NVARCHAR(90),
+		@Description NVARCHAR(1200),
+		@OriginalName NVARCHAR(300),
+		@Duration int,
+		@Link NVARCHAR(300),
+		@PosterPath NVARCHAR(300),
+		@ReleasedDate Date
+		AS
+		UPDATE Movie SET 
+		Title = @Title,
+		PublishDate=@PublishDate,
+		Description = @Description,
+		Link = @Link,
+		PosterPath = @PosterPath,
+		ReleasedDate = @ReleasedDate		
+	WHERE 
+		Id = @Id
+		GO
 /*ovdje stao*/
+/*(Title,Description,OriginalName,Duration,Link,PosterPath,ReleasedDate,PublishDate)
+
+		VALUES(@Title,@Description,@OriginalName,@Duration,@Link,@PosterPath,@ReleasedDate,@PublishDate)
+*/
 

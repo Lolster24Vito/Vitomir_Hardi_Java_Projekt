@@ -1,17 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package hr.algebra;
 
 import hr.algebra.dal.MovieRepository;
 import hr.algebra.dal.RepositoryFactory;
+import hr.algebra.models.Actor;
+import hr.algebra.models.Director;
+import hr.algebra.models.Genre;
 import hr.algebra.models.Movie;
+import hr.algebra.models.MovieArchive;
+import hr.algebra.view.ActorsRefreshable;
+import hr.algebra.view.MoviesRefreshable;
 import hr.algebra.view.UserActorPanel;
 import hr.algebra.view.UserMoviePanel;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -20,7 +22,7 @@ import javax.swing.DefaultListModel;
  *
  * @author vitom
  */
-public class UserFrame extends javax.swing.JFrame {
+public class UserFrame extends javax.swing.JFrame implements ActorsRefreshable,MoviesRefreshable{
 
     /**
      * Creates new form UserFrame
@@ -29,10 +31,15 @@ public class UserFrame extends javax.swing.JFrame {
 
     UserActorPanel userActorPanel;
     UserMoviePanel userMoviePanel;
+    private MovieArchive movieArchive;
     private DefaultListModel<String> moviesModel; 
 
     
     private List<Movie> movies;
+        private Set<Actor> actors;
+    private Set<Director> directors;
+    private Set<Genre> genres;
+
     public UserFrame() {
         initComponents();
         
@@ -40,6 +47,8 @@ public class UserFrame extends javax.swing.JFrame {
              init();
              initTabs();
          } catch (SQLException ex) {
+             Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (Exception ex) {
              Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
          }
     }
@@ -59,6 +68,7 @@ public class UserFrame extends javax.swing.JFrame {
         miLogOut = new javax.swing.JMenuItem();
         menuDownload = new javax.swing.JMenu();
         miXMLDownload = new javax.swing.JMenuItem();
+        debugButton = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -74,6 +84,14 @@ public class UserFrame extends javax.swing.JFrame {
         miXMLDownload.setText("XML download");
         menuDownload.add(miXMLDownload);
 
+        debugButton.setText("debugButton");
+        debugButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                debugButtonActionPerformed(evt);
+            }
+        });
+        menuDownload.add(debugButton);
+
         jMenuBar1.add(menuDownload);
 
         setJMenuBar(jMenuBar1);
@@ -82,15 +100,21 @@ public class UserFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1200, Short.MAX_VALUE)
+            .addComponent(tabPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1386, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 747, Short.MAX_VALUE)
+            .addComponent(tabPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 851, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void debugButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_debugButtonActionPerformed
+        // TODO add your handling code here:
+        MovieArchive test=movieArchive;
+        System.out.println("ss");
+    }//GEN-LAST:event_debugButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -128,6 +152,7 @@ public class UserFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem debugButton;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu menuDownload;
     private javax.swing.JMenu menuProfile;
@@ -138,9 +163,10 @@ public class UserFrame extends javax.swing.JFrame {
 
     private void initTabs() {
         userActorPanel=new UserActorPanel(movies);
-        userMoviePanel=new UserMoviePanel(movies);
-        tabPane.add("Actors",userActorPanel);
+        userMoviePanel=new UserMoviePanel(movies,actors,directors,genres);
         tabPane.add("Movies",userMoviePanel);
+        tabPane.add("Actors",userActorPanel);
+
         
     }
 
@@ -148,10 +174,36 @@ public class UserFrame extends javax.swing.JFrame {
        
     }
 
-    private void init() throws SQLException {
+    private void init() throws SQLException, Exception {
                  repository = RepositoryFactory.getMovieRepository();
                  movies=repository.getMovies();
-                 
+                 actors=repository.getActors();
+                 directors=repository.getDirectors();
+                 genres=repository.getGenres();
+    //             movieArchive=repository.getMovieData();
+                 System.out.println("ss");
 
+    }
+
+    @Override
+    public void refreshActors() {
+         try {
+             actors=repository.getActors();
+             userMoviePanel.setAllActors(actors);
+             userActorPanel.setAllActors(actors);
+         } catch (SQLException ex) {
+             Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+         }
+    }
+
+    @Override
+    public void refreshMovies() {
+         try {
+             movies=repository.getMovies();
+             userMoviePanel.setAllMovies(movies);
+             userActorPanel.setAllMovies(movies);
+         } catch (SQLException ex) {
+             Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+         }
     }
 }
