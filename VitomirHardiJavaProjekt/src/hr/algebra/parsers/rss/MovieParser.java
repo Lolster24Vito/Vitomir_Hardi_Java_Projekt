@@ -21,7 +21,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,16 +34,11 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
-import java.util.TimeZone;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static javax.lang.model.element.NestingKind.LOCAL;
 
 /**
  *
@@ -52,40 +46,31 @@ import static javax.lang.model.element.NestingKind.LOCAL;
  */
 public class MovieParser {
 
-   //https://web.archive.org/web/20211018134319if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1
-   //https://web.archive.org/web/20220122021902if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1
-        //private static final String RSS_URL = "https://web.archive.org/web/20220122021902if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1";
-private static final String RSS_URL = "https://web.archive.org/web/20211018134319if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1";
-private static final String IMAGE_SITE="https://slike3.blitz-cinestar.hr/Plakati/";
+    //https://web.archive.org/web/20211018134319if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1
+    //https://web.archive.org/web/20220122021902if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1
+    //private static final String RSS_URL = "https://web.archive.org/web/20220122021902if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1";
+    private static final String RSS_URL = "https://web.archive.org/web/20211018134319if_/https://www.blitz-cinestar.hr/rss.aspx?najava=1";
+    private static final String IMAGE_SITE = "https://slike3.blitz-cinestar.hr/Plakati/";
 
     private static final String ATTRIBUTE_URL = "url";
     private static final String EXT = ".jpg";
     private static final String DIR = "assets/moviePosters";
-    
-    
-    
-    private static final String STRING_SEPERATOR=",";
+
+    private static final String STRING_SEPERATOR = ",";
 
     private MovieParser() {
 
     }
 
     public static MovieArchive parse() throws IOException, XMLStreamException, ParseException {
-    
 
-        
+        //        DateFormat dateFormatReleased = new SimpleDateFormat ("dd.MM.yyyy");
+        DateFormat dateFormatReleased = new SimpleDateFormat(Movie.dateFormatReleasedPattern);
 
-        
-        DateFormat dateFormatReleased = new SimpleDateFormat ("dd.MM.yyyy");
-         
-         
-        
         List<Movie> movies = new ArrayList<>();
         Set<Actor> actors = new HashSet<>();
         Set<Director> directors = new HashSet<>();
         Set<Genre> genres = new HashSet<>();
-
-
 
         HttpURLConnection con = UrlConnectionFactory.getHttpUrlConnection(RSS_URL);
         try (InputStream is = con.getInputStream()) {
@@ -96,8 +81,7 @@ private static final String IMAGE_SITE="https://slike3.blitz-cinestar.hr/Plakati
             while (reader.hasNext()) {
                 XMLEvent event = reader.nextEvent();
 
-               // System.out.println("FULLEVENT:" + event.toString());
-
+                // System.out.println("FULLEVENT:" + event.toString());
                 switch (event.getEventType()) {
                     case XMLStreamConstants.START_ELEMENT:
                         startElement = event.asStartElement();
@@ -106,7 +90,7 @@ private static final String IMAGE_SITE="https://slike3.blitz-cinestar.hr/Plakati
                         if (tagType.isPresent() && tagType.get().equals((TagType.ITEM))) {
                             movie = new Movie();
                         }
-                      //  System.out.println("STARTELEMENT qname:" + qName);
+                        //  System.out.println("STARTELEMENT qname:" + qName);
 
                         break;
                     case XMLStreamConstants.CHARACTERS:
@@ -123,7 +107,7 @@ private static final String IMAGE_SITE="https://slike3.blitz-cinestar.hr/Plakati
                                         break;
                                     case PUB_DATE:
                                         LocalDateTime publishedDate = LocalDateTime.parse(data, DateTimeFormatter.RFC_1123_DATE_TIME);
-                                         movie.setPubDate(publishedDate);
+                                        movie.setPubDate(publishedDate);
                                         //PUB DATE FORMAT
                                         break;
                                     case DESCRIPTION:
@@ -141,8 +125,8 @@ private static final String IMAGE_SITE="https://slike3.blitz-cinestar.hr/Plakati
                                         }
                                         break;
                                     case POSTER:
-                                        if(startElement!=null&&movie.getPosterPath()==null){
-                                        handlePicture(movie,data);
+                                        if (startElement != null && movie.getPosterPath() == null) {
+                                            handlePicture(movie, data);
                                         }
                                         break;
                                     case LINK:
@@ -157,7 +141,7 @@ private static final String IMAGE_SITE="https://slike3.blitz-cinestar.hr/Plakati
                                         movie.setReleased(releasedDate);
                                         break;
                                     case DIRECTOR:
-                                        List<String> directorsNames=StringHelperUtils.seperateStringToList(data, STRING_SEPERATOR);
+                                        List<String> directorsNames = StringHelperUtils.seperateStringToList(data, STRING_SEPERATOR);
                                         for (String var : directorsNames) {
                                             movie.addDirector(var);
                                             directors.add(new Director(var));
@@ -165,14 +149,14 @@ private static final String IMAGE_SITE="https://slike3.blitz-cinestar.hr/Plakati
 
                                         break;
                                     case ACTORS:
-                                      List<String> actorsNames=StringHelperUtils.seperateStringToList(data, STRING_SEPERATOR);
+                                        List<String> actorsNames = StringHelperUtils.seperateStringToList(data, STRING_SEPERATOR);
                                         for (String var : actorsNames) {
                                             movie.addActor(var);
                                             actors.add(new Actor(var));
                                         }
                                         break;
                                     case GENRE:
-                                        List<String> genreNames=StringHelperUtils.seperateStringToList(data, STRING_SEPERATOR);
+                                        List<String> genreNames = StringHelperUtils.seperateStringToList(data, STRING_SEPERATOR);
                                         for (String var : genreNames) {
                                             movie.addGenre(var);
                                             genres.add(new Genre(var));
@@ -200,37 +184,38 @@ private static final String IMAGE_SITE="https://slike3.blitz-cinestar.hr/Plakati
                         Optional<TagType> tag = TagType.from(endName);
                         if (tag.isPresent() && tag.get().equals(TagType.ITEM)) {
                             movies.add(movie);
-                          //  System.out.println("ENDElement:" + event.asEndElement().toString());
+                            //  System.out.println("ENDElement:" + event.asEndElement().toString());
 
                         }
                         break;
                 }
             }
         }
-        MovieArchive movieArchive=new MovieArchive(movies, actors, directors, genres);
+        MovieArchive movieArchive = new MovieArchive(movies, actors, directors, genres);
         return movieArchive;
-       // return movies;
+        // return movies;
     }
-    
- private static void handlePicture(Movie movie, String pictureUrl) {
+
+    private static void handlePicture(Movie movie, String pictureUrl) {
 
         try {
             String ext = pictureUrl.substring(pictureUrl.lastIndexOf("."));
             if (ext.length() > 4) {
                 ext = EXT;
             }
-String pictureNameExtension = pictureUrl.substring( pictureUrl.lastIndexOf('/')+1, pictureUrl.length() );
+            String pictureNameExtension = pictureUrl.substring(pictureUrl.lastIndexOf('/') + 1, pictureUrl.length());
 
-String[] parts=pictureNameExtension.split("_");
-         String pictureName="";
-         for(int i=4;i<parts.length;i++){
-             if(i!=4)pictureName+="_";
-             pictureName+=parts[i];
-         }
-
+            String[] parts = pictureNameExtension.split("_");
+            String pictureName = "";
+            for (int i = 4; i < parts.length; i++) {
+                if (i != 4) {
+                    pictureName += "_";
+                }
+                pictureName += parts[i];
+            }
 
 //String pictureName = pictureNameExtension.substring(19, pictureNameExtension.lastIndexOf('.'))+EXT;
-String workingPictureURL=IMAGE_SITE+pictureNameExtension;
+            String workingPictureURL = IMAGE_SITE + pictureNameExtension;
 //String pictureName = UUID.randomUUID() + ext;
             String localPicturePath = DIR + File.separator + pictureName;
 
@@ -240,6 +225,7 @@ String workingPictureURL=IMAGE_SITE+pictureNameExtension;
             Logger.getLogger(MovieParser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     private enum TagType {
 
         ITEM("item"),

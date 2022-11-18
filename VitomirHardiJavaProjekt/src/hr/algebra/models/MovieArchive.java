@@ -9,16 +9,30 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author vitom
  */
+@XmlRootElement(name = "MovieArchive")
+@XmlAccessorType(XmlAccessType.NONE)
 public class MovieArchive {
+    
+    @XmlElementWrapper(name="channel")
+    @XmlElement(name = "item")
     private List<Movie> movies;
     private Set<Actor> actors;
 
     public MovieArchive() {
+    }
+
+    public MovieArchive(List<Movie> movies) {
+        this.movies = movies;
     }
 
 

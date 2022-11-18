@@ -3,9 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/models/Actor.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/models/Movie.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/UserFrame.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/GenericDbEntityDialog.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/models/ReleasedDateAdapter.java</file>
             <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/dal/MovieRepository.java</file>
-            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/view/UserMoviePanel.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/view/interfaces/AddableEntities.java</file>
             <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/dal/sql/MovieSqlRepository.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/view/UserMoviePanel.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/parsers/rss/MovieParser.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/view/interfaces/EntityAddable.java</file>
         </group>
     </open-files>
 </project-private>

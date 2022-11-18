@@ -7,50 +7,55 @@ import hr.algebra.models.Director;
 import hr.algebra.models.Genre;
 import hr.algebra.models.Movie;
 import hr.algebra.models.MovieArchive;
-import hr.algebra.view.ActorsRefreshable;
-import hr.algebra.view.MoviesRefreshable;
+import hr.algebra.utils.JAXBUtils;
+import hr.algebra.utils.MessageUtils;
+import hr.algebra.view.interfaces.ActorsRefreshable;
+import hr.algebra.view.interfaces.MoviesRefreshable;
 import hr.algebra.view.UserActorPanel;
 import hr.algebra.view.UserMoviePanel;
+import hr.algebra.view.interfaces.AddableEntities;
+import hr.algebra.view.interfaces.EntityAddable;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
+import javax.xml.bind.JAXBException;
 
 /**
  *
  * @author vitom
  */
-public class UserFrame extends javax.swing.JFrame implements ActorsRefreshable,MoviesRefreshable{
+public class UserFrame extends javax.swing.JFrame implements ActorsRefreshable, MoviesRefreshable, EntityAddable {
 
     /**
      * Creates new form UserFrame
      */
-     private MovieRepository repository;
+    private MovieRepository repository;
 
     UserActorPanel userActorPanel;
     UserMoviePanel userMoviePanel;
     private MovieArchive movieArchive;
-    private DefaultListModel<String> moviesModel; 
 
-    
     private List<Movie> movies;
-        private Set<Actor> actors;
+    private Set<Actor> actors;
     private Set<Director> directors;
     private Set<Genre> genres;
+    private static final String FILENAME = "movieArchive.xml";
 
     public UserFrame() {
         initComponents();
-        
-         try {
-             init();
-             initTabs();
-         } catch (SQLException ex) {
-             Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
-         } catch (Exception ex) {
-             Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
-         }
+
+        try {
+            init();
+            initTabs();
+        } catch (SQLException ex) {
+                                                showErrorMessage("Error With init and server");
+            Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+                                                            showErrorMessage("Error With init and server");
+            Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -69,12 +74,21 @@ public class UserFrame extends javax.swing.JFrame implements ActorsRefreshable,M
         menuDownload = new javax.swing.JMenu();
         miXMLDownload = new javax.swing.JMenuItem();
         debugButton = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        miAddActor = new javax.swing.JMenuItem();
+        miAddDirector = new javax.swing.JMenuItem();
+        miAddGenre = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         menuProfile.setText("Profile");
 
         miLogOut.setText("Log out");
+        miLogOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miLogOutActionPerformed(evt);
+            }
+        });
         menuProfile.add(miLogOut);
 
         jMenuBar1.add(menuProfile);
@@ -82,6 +96,11 @@ public class UserFrame extends javax.swing.JFrame implements ActorsRefreshable,M
         menuDownload.setText("Download");
 
         miXMLDownload.setText("XML download");
+        miXMLDownload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miXMLDownloadActionPerformed(evt);
+            }
+        });
         menuDownload.add(miXMLDownload);
 
         debugButton.setText("debugButton");
@@ -93,6 +112,34 @@ public class UserFrame extends javax.swing.JFrame implements ActorsRefreshable,M
         menuDownload.add(debugButton);
 
         jMenuBar1.add(menuDownload);
+
+        jMenu1.setText("Add");
+
+        miAddActor.setText("Add Actor");
+        miAddActor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miAddActorActionPerformed(evt);
+            }
+        });
+        jMenu1.add(miAddActor);
+
+        miAddDirector.setText("Add director");
+        miAddDirector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miAddDirectorActionPerformed(evt);
+            }
+        });
+        jMenu1.add(miAddDirector);
+
+        miAddGenre.setText("Add Genre");
+        miAddGenre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miAddGenreActionPerformed(evt);
+            }
+        });
+        jMenu1.add(miAddGenre);
+
+        jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
 
@@ -112,9 +159,58 @@ public class UserFrame extends javax.swing.JFrame implements ActorsRefreshable,M
 
     private void debugButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_debugButtonActionPerformed
         // TODO add your handling code here:
-        MovieArchive test=movieArchive;
-        System.out.println("ss");
+        showAddActorDialog();
+
+
     }//GEN-LAST:event_debugButtonActionPerformed
+
+    private void miXMLDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miXMLDownloadActionPerformed
+
+        try {
+            movieArchive = repository.getMovieData();
+            JAXBUtils.save(movieArchive, FILENAME);
+            MessageUtils.showInformationMessage("Info", "Movies saved saved");
+        } catch (JAXBException ex) {
+            MessageUtils.showErrorMessage("Error", "Unable to save papers");
+            Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_miXMLDownloadActionPerformed
+
+    private void miLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miLogOutActionPerformed
+        LoginFrame loginFrame = new LoginFrame();
+        loginFrame.show();
+        this.dispose();
+    }//GEN-LAST:event_miLogOutActionPerformed
+
+    private void miAddActorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAddActorActionPerformed
+        showAddActorDialog();
+    }//GEN-LAST:event_miAddActorActionPerformed
+
+    public void showAddActorDialog() {
+        // TODO add your handling code here:
+        new GenericDbEntityDialog(this, false, AddableEntities.Actor).setVisible(true);
+    }
+
+    private void miAddDirectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAddDirectorActionPerformed
+        showAddDirectorDialog();
+    }//GEN-LAST:event_miAddDirectorActionPerformed
+
+    private void showAddDirectorDialog() {
+        // TODO add your handling code here:
+        new GenericDbEntityDialog(this, false, AddableEntities.Director).setVisible(true);
+    }
+
+    private void miAddGenreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAddGenreActionPerformed
+        showAddGenreDialog();
+
+    }//GEN-LAST:event_miAddGenreActionPerformed
+
+    private void showAddGenreDialog() {
+        // TODO add your handling code here:
+        new GenericDbEntityDialog(this, false, AddableEntities.Genre).setVisible(true);
+    }
 
     /**
      * @param args the command line arguments
@@ -153,57 +249,146 @@ public class UserFrame extends javax.swing.JFrame implements ActorsRefreshable,M
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem debugButton;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu menuDownload;
     private javax.swing.JMenu menuProfile;
+    private javax.swing.JMenuItem miAddActor;
+    private javax.swing.JMenuItem miAddDirector;
+    private javax.swing.JMenuItem miAddGenre;
     private javax.swing.JMenuItem miLogOut;
     private javax.swing.JMenuItem miXMLDownload;
     private javax.swing.JTabbedPane tabPane;
     // End of variables declaration//GEN-END:variables
 
     private void initTabs() {
-        userActorPanel=new UserActorPanel(movies);
-        userMoviePanel=new UserMoviePanel(movies,actors,directors,genres);
-        tabPane.add("Movies",userMoviePanel);
-        tabPane.add("Actors",userActorPanel);
+        userActorPanel = new UserActorPanel(movies);
+        userMoviePanel = new UserMoviePanel(movies, actors, directors, genres);
+        tabPane.add("Movies", userMoviePanel);
+        tabPane.add("Actors", userActorPanel);
 
-        
-    }
-
-    private void loadMovies() {
-       
     }
 
     private void init() throws SQLException, Exception {
-                 repository = RepositoryFactory.getMovieRepository();
-                 movies=repository.getMovies();
-                 actors=repository.getActors();
-                 directors=repository.getDirectors();
-                 genres=repository.getGenres();
-    //             movieArchive=repository.getMovieData();
-                 System.out.println("ss");
-
+        repository = RepositoryFactory.getMovieRepository();
+        movies = repository.getMovies();
+        actors = repository.getActors();
+        directors = repository.getDirectors();
+        genres = repository.getGenres();
     }
 
     @Override
     public void refreshActors() {
-         try {
-             actors=repository.getActors();
-             userMoviePanel.setAllActors(actors);
-             userActorPanel.setAllActors(actors);
-         } catch (SQLException ex) {
-             Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
-         }
+        try {
+            actors = repository.getActors();
+            userMoviePanel.setAllActors(actors);
+            userActorPanel.setAllActors(actors);
+        }  catch (Exception ex) {
+                                    showErrorMessage("Error With loading actors");
+            Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void refreshMovies() {
-         try {
-             movies=repository.getMovies();
-             userMoviePanel.setAllMovies(movies);
-             userActorPanel.setAllMovies(movies);
-         } catch (SQLException ex) {
-             Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
-         }
+        try {
+            movies = repository.getMovies();
+            userMoviePanel.setAllMovies(movies);
+            userActorPanel.setAllMovies(movies);
+        } catch (SQLException ex) {
+                        showErrorMessage("Error With our servers");
+
+            Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+                                    showErrorMessage("Error  has happened");
+            Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void addEntity(String name, AddableEntities entityType) {
+        boolean added = false;
+        try {
+            switch (entityType) {
+
+                case Actor:
+                    if (actors.add(new Actor(name))) {
+                        repository.createActor(name);
+                        added = true;
+                        refreshActors();
+                    }
+                    break;
+                case Director:
+                    if (directors.add(new Director(name))) {
+                        repository.createDirector(name);
+                        added = true;
+                        refreshDirectors();
+
+                    }
+                    break;
+                case Genre:
+                    if (genres.add(new Genre(name))) {
+                        repository.createGenre(name);
+                        added = true;
+                        refreshGenre();
+                    }
+                    break;
+                default:
+            }
+        } catch (SQLException ex) {
+            MessageUtils.showErrorMessage("Server error","Our servers are having difficulties");
+
+            Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+                        showErrorMessage("Error creating");
+            Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (added) {
+            MessageUtils.showInformationMessage(entityType.name() + " added", name + " was added");
+        } else {
+            MessageUtils.showErrorMessage(entityType.name() + " cannot be added", name + " is a duplicate");
+
+        }
+    }
+
+    @Override
+    public void showAddDialog(AddableEntities entityType) {
+    switch(entityType){
+            case Actor:
+                showAddActorDialog();
+                break;
+            case Director:
+                showAddDirectorDialog();
+                break;
+            case Genre:
+                showAddGenreDialog();
+                break;
+            default:
+                throw new AssertionError(entityType.name());
+        }
+    }
+
+    private void refreshDirectors() {
+try {
+            directors = repository.getDirectors();
+            userMoviePanel.setAllDirectors(directors);
+        } catch (Exception ex) {
+                        showErrorMessage("Error loading directors");
+
+            Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void refreshGenre() {
+try {
+            genres = repository.getGenres();
+            userMoviePanel.setAllGenres(genres);
+        } catch (Exception ex) {
+            showErrorMessage("Error loading genres");
+            Logger.getLogger(UserFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }    }
+    private void showErrorMessage(String errorMessage){
+        MessageUtils.showErrorMessage("ERROR", errorMessage);
     }
 }

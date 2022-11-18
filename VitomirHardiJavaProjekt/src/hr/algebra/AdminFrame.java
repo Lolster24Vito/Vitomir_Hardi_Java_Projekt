@@ -13,6 +13,7 @@ import hr.algebra.models.Genre;
 import hr.algebra.models.Movie;
 import hr.algebra.models.MovieArchive;
 import hr.algebra.parsers.rss.MovieParser;
+import hr.algebra.utils.FileUtils;
 import hr.algebra.view.AdminPanel;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -45,7 +46,8 @@ public class AdminFrame extends javax.swing.JFrame {
       private static final String UPLOAD_MOVIES = "Upload articles";
     private static final String EDIT_MOVIES = "Edit articles";
     
-    
+        private static final String POSTER_DIR = "assets\\moviePosters";
+
     public AdminFrame() {
         initComponents();
         try{
@@ -287,7 +289,7 @@ public class AdminFrame extends javax.swing.JFrame {
 
             movieArchiveloaded=MovieParser.parse();
             repository.addMovieArchive(movieArchiveloaded);
-            updateJLists(repository.getMovieData());
+            updateJLists(repository.getAllMData());
 
         } catch (IOException ex) {
             Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
@@ -303,6 +305,7 @@ public class AdminFrame extends javax.swing.JFrame {
             // TODO add your handling code here:
             repository.deleteAllData();
 clearJLists();
+            FileUtils.deleteFilesFromDirectory(POSTER_DIR);
         } catch (Exception ex) {
             Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
         }

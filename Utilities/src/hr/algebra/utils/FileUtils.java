@@ -45,13 +45,12 @@ public class FileUtils {
     public static void copyFromUrl(String source, String destination) throws MalformedURLException, IOException {
         createDirHierarchy(destination);
         HttpURLConnection con = UrlConnectionFactory.getHttpUrlConnection(source);
-        File tempFile=new File(destination);
-        if(!tempFile.exists()){
-            
-        
-        try (InputStream is = con.getInputStream()) {
-            Files.copy(is, Paths.get(destination));
-        }
+        File tempFile = new File(destination);
+        if (!tempFile.exists()) {
+
+            try (InputStream is = con.getInputStream()) {
+                Files.copy(is, Paths.get(destination));
+            }
         }
     }
 
@@ -66,16 +65,29 @@ public class FileUtils {
             Files.createDirectories(Paths.get(dir));
         }
     }
-    public static void deleteFilesFromDirectory(String destination) throws IOException{
-                File directory = new File(destination);
+
+    public static void deleteFilesFromDirectory(String destination) throws IOException {
+        File directory = new File(destination);
 
         if (Files.exists(Paths.get(destination))) {
-            for (File file: Objects.requireNonNull(directory.listFiles())) {
+            for (File file : Objects.requireNonNull(directory.listFiles())) {
+                if (!file.isDirectory()) {
+                    file.delete();
+                }
+            }
+
+        }
+    }
+
+    public static void deleteFileFromPath(String path) throws IOException {
+        File file = new File(path);
+
+        if (file.exists()) {
+
             if (!file.isDirectory()) {
                 file.delete();
             }
-        }
-            
+
         }
     }
 

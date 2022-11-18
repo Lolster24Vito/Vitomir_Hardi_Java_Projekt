@@ -24,36 +24,36 @@ import java.util.Set;
 public interface MovieRepository {
 
     //Create
-    int createMovie(Movie movie) throws SQLException;
-    int createActor(String name) throws SQLException;
-    int createGenre(String name) throws SQLException;
-    int createDirector(String name) throws SQLException;
+    int createMovie(Movie movie) throws Exception;
+    int createActor(String name) throws Exception;
+    int createGenre(String name) throws Exception;
+    int createDirector(String name) throws Exception;
 
     void createMovies(List<Movie> articles) throws Exception;
-    void createActors(List<Actor> actors) throws Exception;
-        void createGenres(List<Genre> genre) throws Exception;
-    void createDirectors(List<Director> director) throws Exception;
 
    // delete
-    void deleteActor(int id)throws SQLException;
+    void deleteActor(int id)throws Exception;
+        void deleteDirector(int id)throws Exception;
+    void deleteGenre(int id)throws Exception;
+
 void deleteMovie(int Id) throws Exception ;
     //select get
-    Set<Actor> getActors() throws SQLException;
+    Set<Actor> getActors() throws Exception;
 
-    Set<Director> getDirectors() throws SQLException;
+    Set<Director> getDirectors() throws Exception;
 
-    Set<Genre> getGenres() throws SQLException;
+    Set<Genre> getGenres() throws Exception;
 
-    List<Movie> getMovies() throws SQLException;
+    List<Movie> getMovies() throws Exception;
     
     //Movie properties get
-    List<Actor> getActorsInMovie(int movieId) throws SQLException;
+    List<Actor> getActorsInMovie(int movieId) throws Exception;
 
-    List<Director> getDirectorsInMovie(int movieId) throws SQLException;
+    List<Director> getDirectorsInMovie(int movieId) throws Exception;
 
-    List<Genre> getGenresInMovie(int movieId) throws SQLException;
+    List<Genre> getGenresInMovie(int movieId) throws Exception;
 
-    List<Movie> getMoviesOfActor(int actorId) throws SQLException;
+    List<Movie> getMoviesOfActor(int actorId) throws Exception;
 
 
     //movie set
@@ -72,9 +72,11 @@ void deleteMovie(int Id) throws Exception ;
     void deleteAllData() throws Exception;
 
   
-    Optional<Movie> getMovie(int movieId) throws SQLException;
+    Optional<Movie> getMovie(int movieId) throws Exception;
 
     MovieArchive getMovieData() throws Exception;
+        MovieArchive getAllMData() throws Exception;
+
     //void updateArticle(int id, Article data) throws Exception;
     // void deleteArticle(int id) throws Exception;
     // Optional<Article> selectArticle(int id) throws Exception;

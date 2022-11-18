@@ -6,11 +6,12 @@
  */
 package hr.algebra.view;
 
+import hr.algebra.view.interfaces.MoviesRefreshable;
+import hr.algebra.view.interfaces.ActorsRefreshable;
 import hr.algebra.dal.MovieRepository;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.models.Actor;
 import hr.algebra.models.Generic2ForeignKeyDB;
-import hr.algebra.models.GenericDbEntity;
 import hr.algebra.models.Movie;
 import hr.algebra.models.transferables.ExportMovieTransferHandler;
 import hr.algebra.models.transferables.MovieTransferable;
@@ -27,19 +28,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.DropMode;
-import javax.swing.JComponent;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
-import static javax.swing.TransferHandler.COPY;
 
 /**
  *
  * @author vitom
  */
-public class UserActorPanel extends javax.swing.JPanel implements ActorsRefreshable,MoviesRefreshable{
+public class UserActorPanel extends javax.swing.JPanel implements ActorsRefreshable, MoviesRefreshable {
 
     /**
      * Creates new form UserActorPanel
@@ -67,7 +65,7 @@ public class UserActorPanel extends javax.swing.JPanel implements ActorsRefresha
 
     }
 
-    public void LoadActors() throws SQLException {
+    public void LoadActors() throws Exception {
         allActors = new ArrayList<>(repository.getActors());
     }
 
@@ -224,7 +222,8 @@ public class UserActorPanel extends javax.swing.JPanel implements ActorsRefresha
                 //only save shown result on page
                 moviesWithActorAdded.clear();
                 loadActorMovies(selectedActor.getId());
-            } catch (SQLException ex) {
+            } catch (Exception ex) {
+                MessageUtils.showErrorMessage("Error", "Cannot load actor");
                 Logger.getLogger(UserActorPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -237,8 +236,8 @@ public class UserActorPanel extends javax.swing.JPanel implements ActorsRefresha
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-            // TODO add your handling code here:
-            addActor();
+        // TODO add your handling code here:
+        addActor();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -272,7 +271,7 @@ public class UserActorPanel extends javax.swing.JPanel implements ActorsRefresha
 
             LoadActors();
 
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(UserActorPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         initDragNDrop();
@@ -294,7 +293,7 @@ public class UserActorPanel extends javax.swing.JPanel implements ActorsRefresha
         jListAllActors.setModel(actorsModel);
     }
 
-    private void loadActorMovies(int actorId) throws SQLException {
+    private void loadActorMovies(int actorId) throws Exception {
         moviesOfActor = repository.getMoviesOfActor(actorId);
         refreshActorMovies();
     }
@@ -315,7 +314,7 @@ public class UserActorPanel extends javax.swing.JPanel implements ActorsRefresha
         jListMoviesWithActor.setModel(actorMoviesModel);
     }
 
-   // @Override saveable interface
+    // @Override saveable interface
     public void saveChanges() {
 
         try {
@@ -334,36 +333,36 @@ public class UserActorPanel extends javax.swing.JPanel implements ActorsRefresha
 
     private void addActor() {
         try {
-            String actorName=tfActorName.getText().trim();
-            int id=repository.createActor(actorName);
-            actorsModel.addElement(new Actor(id,actorName));
-            allActors.add(new Actor(id,actorName));
+            String actorName = tfActorName.getText().trim();
+            int id = repository.createActor(actorName);
+            actorsModel.addElement(new Actor(id, actorName));
+            allActors.add(new Actor(id, actorName));
             jListAllActors.setModel(actorsModel);
 
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(UserActorPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void deleteActor() {
-                if(MessageUtils.showConfirmDialog("Are you sure about that?", "Continuing will result in this actor being deleted")==JOptionPane.YES_OPTION){
+        if (MessageUtils.showConfirmDialog("Are you sure about that?", "Continuing will result in this actor being deleted") == JOptionPane.YES_OPTION) {
 
-        try {
-            Actor actor=selectedActor;
-            repository.deleteActor(actor.getId());
-            
-            allActors.removeIf(p->p.getId()==actor.getId());
-            actorsModel.removeElement(actor);
-            tfActorName.setText("");
-        } catch (SQLException ex) {
-            Logger.getLogger(UserActorPanel.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                Actor actor = selectedActor;
+                repository.deleteActor(actor.getId());
+
+                allActors.removeIf(p -> p.getId() == actor.getId());
+                actorsModel.removeElement(actor);
+                tfActorName.setText("");
+            } catch (Exception ex) {
+                Logger.getLogger(UserActorPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-                }
     }
 
     public void setAllActors(Set<Actor> actors) {
-               ActorsRefreshable refreshableParent = (ActorsRefreshable)SwingUtilities.getWindowAncestor(this);
-            refreshableParent.refreshActors();
+        ActorsRefreshable refreshableParent = (ActorsRefreshable) SwingUtilities.getWindowAncestor(this);
+        refreshableParent.refreshActors();
     }
 
     @Override
@@ -375,7 +374,7 @@ public class UserActorPanel extends javax.swing.JPanel implements ActorsRefresha
     }
 
     public void setAllMovies(List<Movie> movies) {
-        allMovies=movies;
+        allMovies = movies;
         loadMovies();
     }
 

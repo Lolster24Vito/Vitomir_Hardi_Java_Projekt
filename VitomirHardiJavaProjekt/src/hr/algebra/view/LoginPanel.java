@@ -10,7 +10,6 @@ import hr.algebra.UserFrame;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.dal.UserRepository;
 import hr.algebra.utils.EncryptionUtils;
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 /**

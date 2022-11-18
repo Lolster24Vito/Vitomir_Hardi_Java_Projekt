@@ -13,6 +13,17 @@ public class GenericDbEntity {
     int id;
     String name;
 
+    public GenericDbEntity() {
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public GenericDbEntity(int id, String name) {
         this.id = id;
         this.name = name;

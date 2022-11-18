@@ -66,7 +66,11 @@ public class MovieSqlRepository implements MovieRepository {
     private static final String CREATE_MOVIE = "{ CALL createMovie (?,?,?,?,?,?,?,?,?) }";
     private static final String CREATE_ACTORMOVIE = "{ CALL CreateActorMovie (?,?) }";
     private static final String CREATE_ACTOR = "{ CALL CreateActor (?,?) }";
+        private static final String CREATE_DIRECTOR = "{ CALL CreateDirector (?,?) }";
+                private static final String CREATE_GENRE = "{ CALL CreateGenre (?,?) }";
 
+
+//CREATE_DIRECTOR
     private static final String UPDATE_MOVIE="{ CALL UpdateMovie (?,?,?,?,?,?,?,?,?) }";
 
 //CreateActorMovie
@@ -86,6 +90,9 @@ public class MovieSqlRepository implements MovieRepository {
     private static final String SELECT_MOVIE_GENRE = "{ CALL SelectMovieGenre () }";
     private static final String GET_ACTOR_NAME = "{ CALL GetActorName(?) }";
     private static final String DELETE_ACTOR = "{ CALL DeleteActor(?) }";
+     private static final String DELETE_DIRECTOR = "{ CALL DeleteDirector(?) }";
+    private static final String DELETE_GENRE = "{ CALL DeleteGenre(?) }";
+
     private static final String DELETE_MOVIE = "{ CALL DeleteMovie(?) }";
 
     private static final String SELECT_ACTORS = "{ CALL SelectActors () }";
@@ -232,11 +239,11 @@ public class MovieSqlRepository implements MovieRepository {
 
         List<Movie> movies = getMovies();
 
-        movieArchive.setActors(getActors());
+//        movieArchive.setActors(getActors());
 
-        movieArchive.setDirectors(getDirectors());
+      //  movieArchive.setDirectors(getDirectors());
 
-        movieArchive.setGenres(getGenres());
+        //movieArchive.setGenres(getGenres());
 
         for (Movie movie : movies) {
             List<Actor> actorsInMovie = getActorsInMovie(movie.getId());
@@ -251,6 +258,25 @@ public class MovieSqlRepository implements MovieRepository {
         }
 
         movieArchive.setMovies(movies);
+
+        return movieArchive;
+    }
+
+     @Override
+    public MovieArchive getAllMData() throws Exception {
+        MovieArchive movieArchive = new MovieArchive();
+        DataSource dataSource = DataSourceSingleton.getInstance();
+
+        List<Movie> movies = getMovies();
+                movieArchive.setMovies(movies);
+
+
+        movieArchive.setActors(getActors());
+
+        movieArchive.setDirectors(getDirectors());
+
+        movieArchive.setGenres(getGenres());
+
 
         return movieArchive;
     }
@@ -476,29 +502,36 @@ public class MovieSqlRepository implements MovieRepository {
 
     @Override
     public int createGenre(String name) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(CREATE_GENRE)) {
+
+            stmt.setString("@" + NAME, name);
+            stmt.registerOutParameter("@" + ID_GENERIC, Types.INTEGER);
+
+            stmt.executeUpdate();
+            int insertedId = stmt.getInt("@" + ID_GENERIC);
+            return insertedId;
+
+        }
     }
 
     @Override
     public int createDirector(String name) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(CREATE_DIRECTOR)) {
 
-    @Override
-    public void createActors(List<Actor> actors) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+            stmt.setString("@" + NAME, name);
+            stmt.registerOutParameter("@" + ID_GENERIC, Types.INTEGER);
 
-    @Override
-    public void createGenres(List<Genre> genre) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+            stmt.executeUpdate();
+            int insertedId = stmt.getInt("@" + ID_GENERIC);
+            return insertedId;
 
-    @Override
-    public void createDirectors(List<Director> director) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        }    }
 
+    
     @Override
     public void deleteActor(int Id) throws SQLException {
         DataSource dataSource = DataSourceSingleton.getInstance();
@@ -546,5 +579,31 @@ public class MovieSqlRepository implements MovieRepository {
 
     }
     }
+
+    @Override
+    public void deleteDirector(int id) throws Exception {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(DELETE_DIRECTOR)) {
+
+            stmt.setInt("@" + ID_GENERIC, id);
+
+            stmt.executeUpdate();
+
+        }    }
+
+    @Override
+    public void deleteGenre(int id) throws Exception {
+ DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(DELETE_GENRE)) {
+
+            stmt.setInt("@" + ID_GENERIC, id);
+
+            stmt.executeUpdate();
+
+        }    }
+
+
 
 }

@@ -6,11 +6,14 @@
 package hr.algebra.models;
 
 import java.util.Objects;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 /**
  *
  * @author vitom
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Director {
 
     public Director(int id, String name) {
@@ -26,6 +29,10 @@ public class Director {
 
     public Director(String name) {
         this.name = name.trim();
+    }
+
+    public int getId() {
+        return id;
     }
 
     @Override

@@ -387,6 +387,33 @@ INSERT INTO [dbo].[Actor]
 
 GO
 
+  CREATE or ALTER PROCEDURE  CreateDirector
+  	@name nvarchar(300),
+	@Id INT OUTPUT
+
+  as
+INSERT INTO [dbo].[DIRECTOR]
+           ([Name])
+     VALUES
+           (@name)
+		   		SET @Id = SCOPE_IDENTITY()
+
+GO
+
+GO
+  CREATE or ALTER PROCEDURE  CreateGenre
+  	@name nvarchar(300),
+	@Id INT OUTPUT
+
+  as
+INSERT INTO [dbo].[GENRE]
+           ([Name])
+     VALUES
+           (@name)
+		   		SET @Id = SCOPE_IDENTITY()
+
+GO
+
  CREATE or ALTER PROCEDURE  UpdateActor
 	@ActorId int,
   	@name nvarchar(300)
@@ -403,6 +430,22 @@ CREATE OR ALTER PROCEDURE DeleteActor
 as
 DELETE from ActorMovie where ActorId=@Id
 Delete from Actor  where Id=@Id
+
+
+GO
+CREATE OR ALTER PROCEDURE DeleteGenre
+@Id int
+as
+DELETE from GenreMovie where GenreId=@Id
+Delete from GENRE  where Id=@Id
+
+
+GO
+CREATE OR ALTER PROCEDURE DeleteDirector
+@Id int
+as
+DELETE from DirectorMovie where DirectorId=@Id
+Delete from DIRECTOR  where Id=@Id
 
 
 GO

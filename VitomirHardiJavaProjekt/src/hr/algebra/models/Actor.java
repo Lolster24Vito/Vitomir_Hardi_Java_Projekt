@@ -28,6 +28,7 @@ public class Actor {
         this.id = id;
         this.name = name;
     }
+    
 
     public void setName(String name) {
         this.name = name;

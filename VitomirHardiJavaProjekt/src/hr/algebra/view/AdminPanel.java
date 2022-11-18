@@ -16,14 +16,12 @@ import hr.algebra.models.MovieArchive;
 import hr.algebra.parsers.rss.MovieParser;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
-import javax.xml.stream.XMLStreamException;
 import hr.algebra.dal.MovieRepository;
 
 /**
