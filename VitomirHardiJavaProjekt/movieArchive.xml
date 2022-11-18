@@ -10,7 +10,7 @@ Priča prati Pola Atreidesa iz kuće Atreides, sjajnog i nadarenog mladića  ro
 Početak prikazivanja: 21.10.2021</description>
             <orignaziv>Dune</orignaziv>
             <redatelj>Denis Villeneuve</redatelj>
-            <glumci>Ansel Elgort,Timothée Chalamet,Rebecca Ferguson,Zendaya</glumci>
+            <glumci>Timothée Chalamet,Rebecca Ferguson,Zendaya</glumci>
             <trajanje>155</trajanje>
             <zanr>SF,avantura</zanr>
             <plakat>assets/moviePosters\Dune_SRB_novi.jpg</plakat>
@@ -40,7 +40,7 @@ Priča prati Pola Atreidesa iz kuće Atreides, sjajnog i nadarenog mladića  ro
 Početak prikazivanja: 21.10.2021</description>
             <orignaziv>Dune 3D 4DX</orignaziv>
             <redatelj>Denis Villeneuve</redatelj>
-            <glumci>Timothée Chalamet,Sana Kostić,Rebecca Ferguson,Zendaya</glumci>
+            <glumci>Timothée Chalamet,Rebecca Ferguson,Zendaya</glumci>
             <trajanje>155</trajanje>
             <zanr>SF,avantura</zanr>
             <plakat>assets/moviePosters\Dune_SRB_novi.jpg</plakat>
@@ -53,11 +53,12 @@ Početak prikazivanja: 21.10.2021</description>
             <description>Priča prati Paula Atreidesa iz kuće Atreides, sjajnog i nadarenog mladića rođenog za velike stvari, koji mora otputovati na najopasniji planet u svemiru kako bi osigurao budućnost svoje obitelj i svog naroda. Nađe se usred sukoba oko ekskluzivne opskrbe najcjenjenijim resursom koji postoji, najvrijednijem elementu galaksije koji se nalazi samo na Arrakisu i koji može otključati najveći potencijal čovječanstva, u kojem će preživjeti samo oni koji mogu pobijediti svoj strah.
 Početak prikazivanja: 21.10.2021</description>
             <orignaziv>Dune 3D IMAX</orignaziv>
-            <redatelj>Denis Villeneuve,Noel Cleary,Garth Jennings</redatelj>
+            <redatelj>Denis Villeneuve</redatelj>
             <glumci>Timothée Chalamet,Rebecca Ferguson,Zendaya</glumci>
             <trajanje>155</trajanje>
-            <zanr>SF,fantazija,avantura</zanr>
+            <zanr>SF,avantura</zanr>
             <plakat>assets/moviePosters\Dune_HR_zadnjii.jpg</plakat>
+            <link>https://www.blitz-cinestar.hr/root/dina-3d-imax/7505//1</link>
             <pocetak>21.10.2021</pocetak>
         </item>
         <item>
@@ -447,7 +448,7 @@ Početak prikazivanja: 11.11.2021</description>
 Početak prikazivanja: 11.11.2021</description>
             <orignaziv>Eternals</orignaziv>
             <redatelj>Chloé Zhao</redatelj>
-            <glumci>Gemma Chan,Kit Harington,Alex Wolff,Angelina Jolie,Salma Hayek,Richard Madden</glumci>
+            <glumci>Gemma Chan,Kit Harington,Angelina Jolie,Salma Hayek,Richard Madden</glumci>
             <trajanje>156</trajanje>
             <zanr>avantura,akcija</zanr>
             <plakat>assets/moviePosters\Eternals_SRB_zadnji.jpg</plakat>
@@ -506,7 +507,7 @@ Ester se nalazi na kraju svoje karijere u ateljeu kuće Dior, jedne od najznača
 Početak prikazivanja: 11.11.2021</description>
             <orignaziv>Haute couture</orignaziv>
             <redatelj>Sylvie Ohayon</redatelj>
-            <glumci>Alex Wolff,Nathalie Baye,Pascale Arbillot,Lyna Khoudri</glumci>
+            <glumci>Nathalie Baye,Pascale Arbillot,Lyna Khoudri</glumci>
             <trajanje>0</trajanje>
             <zanr>drama</zanr>
             <plakat>assets/moviePosters\Visoka_moda_smanjeno.jpg</plakat>
@@ -638,7 +639,7 @@ Početak prikazivanja: 25.11.2021</description>
 Magija Enkanta blagoslovila je svako dete u porodici jedinstvenim darom, od super snage do moc´i isceljenja, svako dete, osim jedno – Mirabel. Ali kada otkrije da je magija koja okružuje Enkanto u opasnosti, Mirabel shvata da bi ona, jedina „normalna“ Madrigal, mogla da bude poslednja nada svoje izuzetne porodice.Početak prikazivanja: 25.11.2021</description>
             <orignaziv>Encanto</orignaziv>
             <redatelj>Jared Bush,Byron Howard,Charise Castro Smith</redatelj>
-            <glumci>Richard Madden</glumci>
+            <glumci></glumci>
             <trajanje>0</trajanje>
             <zanr>animirani</zanr>
             <plakat>assets/moviePosters\Encanto_SRB_novi.jpg</plakat>
@@ -668,10 +669,10 @@ Magija Enkanta blagoslovila je svako dete u porodici jedinstvenim darom, od supe
 Priča prati lukavog prevaranta koji beži od plaćenog ubice. Osmišljava šemu kako se sakriti u policijskoj stanici u malom gradu - ali kad se ubica pojavi na stanici, novi nesrećni policajac nađe se, ni kriv ni dužan, na nišanu… 
 Početak prikazivanja: 25.11.2021</description>
             <orignaziv>Copshop</orignaziv>
-            <redatelj></redatelj>
-            <glumci></glumci>
+            <redatelj>Joe Carnahan</redatelj>
+            <glumci>Toby Huss,Frank Grillo,Gerard Butler</glumci>
             <trajanje>108</trajanje>
-            <zanr></zanr>
+            <zanr>akcija</zanr>
             <plakat>assets/moviePosters\Copshop_SRB_zadnji.jpg</plakat>
             <link>https://www.blitz-cinestar.hr/root/iza-resetaka/7714//1</link>
             <pocetak>25.11.2021</pocetak>
@@ -728,10 +729,11 @@ Kontroverzna priča talijanske obitelji snimljena je pod redateljskom palicom Ri
 Početak prikazivanja: 2.12.2021</description>
             <orignaziv>Kaamelot</orignaziv>
             <redatelj>Alexandre Astier</redatelj>
-            <glumci>Lionnel Astier,Antoine de Caunes,Adam Arkin,Kristen Bell,Sting,Alexandre Astier</glumci>
+            <glumci>Lionnel Astier,Antoine de Caunes,Sting,Alexandre Astier</glumci>
             <trajanje>0</trajanje>
             <zanr>komedija,avantura</zanr>
             <plakat>assets/moviePosters\Kaamelott.png</plakat>
+            <link>https://www.blitz-cinestar.hr/root/kaamelot/7778//1</link>
             <pocetak>02.12.2021</pocetak>
         </item>
         <item>
@@ -1122,7 +1124,7 @@ Početak prikazivanja: 23.12.2021</description>
             <pocetak>23.12.2021</pocetak>
         </item>
         <item>
-            <title>The King`s Man: Početak 2d</title>
+            <title>The King`s Man: Početak</title>
             <pubDate>Mon, 18 Oct 2021 13:43:19 GMT</pubDate>
             <description>Grupa najvećih kriminalaca i tirana okuplja se kako bi isplanirala rat u cilju uništenja miliona ljudi. Jedan čovek moraće da se utrkuje s vremenom kako bi ih zaustavio.Početak prikazivanja: 23.12.2021</description>
             <orignaziv>The King`s Man</orignaziv>
@@ -1130,7 +1132,8 @@ Početak prikazivanja: 23.12.2021</description>
             <glumci>Gemma Arterton,Aaron Taylor-Johnson,Branka Katić,Ralph Fiennes,Matthew Goode</glumci>
             <trajanje>131</trajanje>
             <zanr>komedija,avantura,akcija</zanr>
-            <plakat>assets\moviePosters\Kingsman_SRB_zadnji.jpg</plakat>
+            <plakat>assets/moviePosters\Kingsman_SRB_zadnji.jpg</plakat>
+            <link>https://www.blitz-cinestar.hr/root/the-king-s-man-pocetak/7263//1</link>
             <pocetak>23.12.2021</pocetak>
         </item>
         <item>
@@ -1198,7 +1201,8 @@ Početak prikazivanja: 30.12.2021</description>
             <glumci></glumci>
             <trajanje>0</trajanje>
             <zanr>animirani</zanr>
-            <plakat>assets\moviePosters\Bee.jpg</plakat>
+            <plakat>assets/moviePosters\Maya_3_HR.jpg</plakat>
+            <link>https://www.blitz-cinestar.hr/root/pcelica-maja-3-zlatno-jaje-sink/7782//1</link>
             <pocetak>30.12.2021</pocetak>
         </item>
         <item>
@@ -1213,62 +1217,6 @@ Početak prikazivanja: 30.12.2021</description>
             <plakat>assets/moviePosters\Cinestar_B1.jpg</plakat>
             <link>https://www.blitz-cinestar.hr/root/the-contractor/7783//1</link>
             <pocetak>30.12.2021</pocetak>
-        </item>
-        <item>
-            <title>God of war</title>
-            <pubDate>Mon, 18 Oct 2021 13:43:19 GMT</pubDate>
-            <description>Homer je opet to ucinio napio se i ubio grcke bogove.
-
-Početak prikazivanja: 21.10.2021</description>
-            <orignaziv>God of war</orignaziv>
-            <redatelj>Denis Villeneuve</redatelj>
-            <glumci>Timothée Chalamet,Rebecca Ferguson,Zendaya</glumci>
-            <trajanje>155</trajanje>
-            <zanr>SF,avantura</zanr>
-            <plakat>assets\moviePosters\god-of-war-simpsons-mod-1652899173924.png</plakat>
-            <pocetak>21.10.2021</pocetak>
-        </item>
-        <item>
-            <title>Godof war 2</title>
-            <pubDate>Mon, 18 Oct 2021 13:43:19 GMT</pubDate>
-            <description>atreius get me my axe boi of war</description>
-            <orignaziv>Godof war 2</orignaziv>
-            <redatelj>Denis Villeneuve</redatelj>
-            <glumci>Adam Driver,Petar Mihailović,Timothée Chalamet,Rebecca Ferguson,Zendaya</glumci>
-            <trajanje>155</trajanje>
-            <zanr>SF,avantura</zanr>
-            <plakat>assets\moviePosters\god-of-war-fan-casting-poster-38222-large.jpg</plakat>
-            <pocetak>21.10.2021</pocetak>
-        </item>
-        <item>
-            <title>Harmonika note</title>
-            <pubDate>Wed, 18 Oct 2023 13:43:19 GMT</pubDate>
-            <description>Kultna franšiza je napokon dobila svoj nastavak. Prikaz distopijske budućnosti u kojoj je čovečanstvo zarobljeno u simuliranoj stvarnosti, očaralo je gledaoce daleke 1999. godine. Takva simulirana stvarnost oduševila je impresivnim vizuelnim efektima, slojevitom, zahtevnom pričom koja kombinuje filozofiju, religiju, etiku i tehnologiju.
-
-Matriks će svojom složenom radnjom, uveliko inspirisanu filozofijom, gledaoce prisiliti na drugačiju vrstu učestvovanja u filmu – na razmišljanje o identitetu, postojanju i moralnim pitanjima koja nikada nisu bila toliko aktualna kao danas, u vremenu u kojem živimo.
-Početak prikazivanja: 23.12.2021</description>
-            <orignaziv>Harmonika notes</orignaziv>
-            <redatelj>Lana Wachowski</redatelj>
-            <glumci>Carrie-Anne Moss,Priyanka Chopra,Jada Pinkett-Smith,Jonathan Groff,Keanu Reeves,Yahya Abdul-Mateen II,Neil Patrick Harris</glumci>
-            <trajanje>22</trajanje>
-            <zanr>akcija</zanr>
-            <plakat>assets\moviePosters\39993764_322599311817718_6728595619608264704_n (1).png</plakat>
-            <pocetak>24.12.2023</pocetak>
-        </item>
-        <item>
-            <title>Harmonika note2</title>
-            <pubDate>Wed, 18 Oct 2023 13:43:19 GMT</pubDate>
-            <description>Kultna franšiza je napokon dobila svoj nastavak. Prikaz distopijske budućnosti u kojoj je čovečanstvo zarobljeno u simuliranoj stvarnosti, očaralo je gledaoce daleke 1999. godine. Takva simulirana stvarnost oduševila je impresivnim vizuelnim efektima, slojevitom, zahtevnom pričom koja kombinuje filozofiju, religiju, etiku i tehnologiju.
-
-Matriks će svojom složenom radnjom, uveliko inspirisanu filozofijom, gledaoce prisiliti na drugačiju vrstu učestvovanja u filmu – na razmišljanje o identitetu, postojanju i moralnim pitanjima koja nikada nisu bila toliko aktualna kao danas, u vremenu u kojem živimo.
-Početak prikazivanja: 23.12.2021</description>
-            <orignaziv>Harmonika notes</orignaziv>
-            <redatelj>Lana Wachowski</redatelj>
-            <glumci>Carrie-Anne Moss,Priyanka Chopra,Jada Pinkett-Smith,Jonathan Groff,Keanu Reeves,Yahya Abdul-Mateen II,Neil Patrick Harris</glumci>
-            <trajanje>22</trajanje>
-            <zanr>akcija</zanr>
-            <plakat>assets\moviePosters\1024px-X-RayFlare-BlackHole-MilkyWay-20140105.jpg</plakat>
-            <pocetak>24.12.2023</pocetak>
         </item>
     </channel>
 </MovieArchive>

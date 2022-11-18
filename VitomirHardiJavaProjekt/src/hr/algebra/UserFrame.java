@@ -7,6 +7,7 @@ import hr.algebra.models.Director;
 import hr.algebra.models.Genre;
 import hr.algebra.models.Movie;
 import hr.algebra.models.MovieArchive;
+import hr.algebra.utils.FileUtils;
 import hr.algebra.utils.JAXBUtils;
 import hr.algebra.utils.MessageUtils;
 import hr.algebra.view.interfaces.ActorsRefreshable;
@@ -15,6 +16,7 @@ import hr.algebra.view.UserActorPanel;
 import hr.algebra.view.UserMoviePanel;
 import hr.algebra.view.interfaces.AddableEntities;
 import hr.algebra.view.interfaces.EntityAddable;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
@@ -73,7 +75,6 @@ public class UserFrame extends javax.swing.JFrame implements ActorsRefreshable, 
         miLogOut = new javax.swing.JMenuItem();
         menuDownload = new javax.swing.JMenu();
         miXMLDownload = new javax.swing.JMenuItem();
-        debugButton = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         miAddActor = new javax.swing.JMenuItem();
         miAddDirector = new javax.swing.JMenuItem();
@@ -102,14 +103,6 @@ public class UserFrame extends javax.swing.JFrame implements ActorsRefreshable, 
             }
         });
         menuDownload.add(miXMLDownload);
-
-        debugButton.setText("debugButton");
-        debugButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                debugButtonActionPerformed(evt);
-            }
-        });
-        menuDownload.add(debugButton);
 
         jMenuBar1.add(menuDownload);
 
@@ -151,21 +144,17 @@ public class UserFrame extends javax.swing.JFrame implements ActorsRefreshable, 
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 851, Short.MAX_VALUE)
+            .addComponent(tabPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 877, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void debugButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_debugButtonActionPerformed
-        // TODO add your handling code here:
-        showAddActorDialog();
-
-
-    }//GEN-LAST:event_debugButtonActionPerformed
-
     private void miXMLDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miXMLDownloadActionPerformed
-
+  File file = FileUtils.uploadFile("Images", "jpg", "jpeg", "png");
+        if (file == null) {
+            return;
+        }
         try {
             movieArchive = repository.getMovieData();
             JAXBUtils.save(movieArchive, FILENAME);
@@ -248,7 +237,6 @@ public class UserFrame extends javax.swing.JFrame implements ActorsRefreshable, 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem debugButton;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu menuDownload;

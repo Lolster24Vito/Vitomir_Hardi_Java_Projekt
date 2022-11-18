@@ -211,7 +211,7 @@ public class UserMoviePanel extends javax.swing.JPanel implements ActorsRefresha
 
         jLabel4.setText("Duration");
 
-        lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/A_bili_smo_vam_dobri_HR_zadnji.jpg"))); // NOI18N
+        lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/no_image.png"))); // NOI18N
 
         jButton1.setText("Choose image");
 

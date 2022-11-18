@@ -411,7 +411,7 @@
         <Component class="javax.swing.JLabel" name="lbIcon">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/assets/A_bili_smo_vam_dobri_HR_zadnji.jpg"/>
+              <Image iconType="3" name="/assets/no_image.png"/>
             </Property>
           </Properties>
         </Component>
