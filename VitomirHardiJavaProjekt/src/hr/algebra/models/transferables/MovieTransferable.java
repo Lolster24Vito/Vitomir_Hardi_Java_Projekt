@@ -5,8 +5,6 @@
  */
 package hr.algebra.models.transferables;
 
-import hr.algebra.models.Actor;
-import hr.algebra.models.GenericDbEntity;
 import hr.algebra.models.Movie;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;

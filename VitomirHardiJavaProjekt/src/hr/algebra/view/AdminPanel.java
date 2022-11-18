@@ -5,7 +5,6 @@
  */
 package hr.algebra.view;
 
-import hr.algebra.AdminPrototype;
 import hr.algebra.AdminFrame;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.models.Actor;
@@ -242,11 +241,11 @@ public class AdminPanel extends javax.swing.JPanel {
 
 
         } catch (IOException ex) {
-            Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
-            Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_btnUploadActionPerformed
@@ -257,7 +256,7 @@ public class AdminPanel extends javax.swing.JPanel {
             repository.deleteAllData();
             
         } catch (Exception ex) {
-            Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnDeleteAllActionPerformed
 

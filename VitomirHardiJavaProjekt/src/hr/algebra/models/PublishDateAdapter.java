@@ -15,17 +15,17 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  *
  * @author vitom
  */
-class PublishDateAdapter extends XmlAdapter<String, LocalDateTime>{
+class PublishDateAdapter extends XmlAdapter<String, LocalDateTime> {
 
     @Override
     public LocalDateTime unmarshal(String v) throws Exception {
-     return LocalDateTime.parse(v, DateTimeFormatter.RFC_1123_DATE_TIME);
+        return LocalDateTime.parse(v, DateTimeFormatter.RFC_1123_DATE_TIME);
     }
 
     @Override
     public String marshal(LocalDateTime v) throws Exception {
-                ZonedDateTime zdt = v.atZone(ZoneId.of("GMT"));
-      return zdt.format(DateTimeFormatter.RFC_1123_DATE_TIME); 
+        ZonedDateTime zdt = v.atZone(ZoneId.of("GMT"));
+        return zdt.format(DateTimeFormatter.RFC_1123_DATE_TIME);
     }
-    
+
 }

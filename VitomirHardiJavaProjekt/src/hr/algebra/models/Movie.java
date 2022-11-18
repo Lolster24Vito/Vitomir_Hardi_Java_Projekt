@@ -5,8 +5,6 @@
  */
 package hr.algebra.models;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
@@ -16,7 +14,6 @@ import java.util.stream.Collectors;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -25,7 +22,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * @author vitom
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(propOrder = {"title","pubDate", "description", "originalName", "directorsString","actorsString","duration","genresString","posterPath","link","released"})
+@XmlType(propOrder = {"title", "pubDate", "description", "originalName", "directorsString", "actorsString", "duration", "genresString", "posterPath", "link", "released"})
 
 public class Movie {
 
@@ -45,22 +42,22 @@ public class Movie {
     @XmlElement(name = "redatelj")
     private String directorsString;
     private Set<Director> directors = new HashSet<>();
-    
+
     @XmlElement(name = "glumci")
     private String actorsString;
     private Set<Actor> actors = new HashSet<>();
-    
+
     @XmlElement(name = "trajanje")
     private int duration;
     @XmlElement(name = "zanr")
-     private String genresString;
+    private String genresString;
     private Set<Genre> genres = new HashSet<>();
     @XmlElement(name = "plakat")
     private String posterPath;
-            @XmlElement(name = "link")
+    @XmlElement(name = "link")
     private String link;
-        @XmlJavaTypeAdapter(ReleasedDateAdapter.class)
-        @XmlElement(name = "pocetak")
+    @XmlJavaTypeAdapter(ReleasedDateAdapter.class)
+    @XmlElement(name = "pocetak")
     private Date released;
 
     public Movie(int id, String title, LocalDateTime pubDate, String description, String originalName, int duration, String posterPath, String link, Date released) {
@@ -75,7 +72,6 @@ public class Movie {
         this.released = released;
     }
 
-
     public Movie() {
     }
 
@@ -85,7 +81,7 @@ public class Movie {
     }
 
     public Movie(String title, List<Actor> addedMovieActors, List<Director> addedMovieDirectors, List<Genre> addedMovieGenre) {
-       this.title=title;
+        this.title = title;
         addActors(addedMovieActors);
         addDirectors(addedMovieDirectors);
         addGenres(addedMovieGenre);
@@ -130,7 +126,7 @@ public class Movie {
 
     public void setDirectors(Set<Director> directors) {
         this.directors = directors;
-        
+
     }
 
     public void addDirector(String name) {
@@ -138,6 +134,7 @@ public class Movie {
         directors.add(director);
         stringDirectorsRefresh();
     }
+
     public void addDirector(Director director) {
         directors.add(director);
         stringDirectorsRefresh();
@@ -159,26 +156,26 @@ public class Movie {
 
     public void addActor(Actor actor) {
         actors.add(actor);
-                stringActorsRefresh();
+        stringActorsRefresh();
 
     }
-    public void addActors(List<Actor> actorsList){
+
+    public void addActors(List<Actor> actorsList) {
         this.actors.addAll(actorsList);
-                stringActorsRefresh();
+        stringActorsRefresh();
 
     }
-    
+
     public void addDirectors(List<Director> directorsList) {
         this.directors.addAll(directorsList);
-                stringDirectorsRefresh();
+        stringDirectorsRefresh();
 
     }
-    
-    public void addGenres(List<Genre> genresList){
+
+    public void addGenres(List<Genre> genresList) {
         this.genres.addAll(genresList);
-                stringGenresRefresh();
+        stringGenresRefresh();
     }
-    
 
     public int getDuration() {
         return duration;
@@ -194,18 +191,19 @@ public class Movie {
 
     public void setGenres(Set<Genre> genres) {
         this.genres = genres;
-                        stringGenresRefresh();
+        stringGenresRefresh();
     }
 
     public void addGenre(String name) {
         Genre genre = new Genre(name);
         genres.add(genre);
-                stringGenresRefresh();
+        stringGenresRefresh();
 
     }
-     public void addGenre(Genre genre) {
+
+    public void addGenre(Genre genre) {
         genres.add(genre);
-                stringGenresRefresh();
+        stringGenresRefresh();
 
     }
 
@@ -244,24 +242,24 @@ public class Movie {
     @Override
     public String toString() {
         return title;
-//return super.toString(); //To change body of generated methods, choose Tools | Templates.
     }
-    public GenericDbEntity toGenericDbEntity(){
+
+    public GenericDbEntity toGenericDbEntity() {
         return new GenericDbEntity(id, title);
     }
-    
-    public void stringDirectorsRefresh(){
-         directorsString=directors.stream().map(d->d.getName()).collect(Collectors.joining(","));
-    }
-    public void stringActorsRefresh(){
-                 actorsString=actors.stream().map(d->d.getName()).collect(Collectors.joining(","));
 
+    public void stringDirectorsRefresh() {
+        directorsString = directors.stream().map(d -> d.getName()).collect(Collectors.joining(","));
     }
-    public void stringGenresRefresh(){
-     genresString=genres.stream().map(d->d.getName()).collect(Collectors.joining(","));
+
+    public void stringActorsRefresh() {
+        actorsString = actors.stream().map(d -> d.getName()).collect(Collectors.joining(","));
 
     }
 
-    
+    public void stringGenresRefresh() {
+        genresString = genres.stream().map(d -> d.getName()).collect(Collectors.joining(","));
+
+    }
 
 }

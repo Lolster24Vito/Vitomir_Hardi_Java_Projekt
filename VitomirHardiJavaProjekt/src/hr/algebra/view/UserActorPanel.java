@@ -326,7 +326,8 @@ public class UserActorPanel extends javax.swing.JPanel implements ActorsRefresha
                 repository.addMoviesToActor(moviesWithActorAdded);
                 moviesWithActorAdded.clear();
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
+            MessageUtils.showErrorMessage("Error", "Changes could not be saved");
             Logger.getLogger(UserActorPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -16,26 +16,18 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.sql.Types;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import static java.util.Collections.list;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.IntStream;
 import javax.sql.DataSource;
 import hr.algebra.dal.MovieRepository;
 import hr.algebra.models.GenericDbEntity;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -66,38 +58,32 @@ public class MovieSqlRepository implements MovieRepository {
     private static final String CREATE_MOVIE = "{ CALL createMovie (?,?,?,?,?,?,?,?,?) }";
     private static final String CREATE_ACTORMOVIE = "{ CALL CreateActorMovie (?,?) }";
     private static final String CREATE_ACTOR = "{ CALL CreateActor (?,?) }";
-        private static final String CREATE_DIRECTOR = "{ CALL CreateDirector (?,?) }";
-                private static final String CREATE_GENRE = "{ CALL CreateGenre (?,?) }";
-
+    private static final String CREATE_DIRECTOR = "{ CALL CreateDirector (?,?) }";
+    private static final String CREATE_GENRE = "{ CALL CreateGenre (?,?) }";
 
 //CREATE_DIRECTOR
-    private static final String UPDATE_MOVIE="{ CALL UpdateMovie (?,?,?,?,?,?,?,?,?) }";
+    private static final String UPDATE_MOVIE = "{ CALL UpdateMovie (?,?,?,?,?,?,?,?,?) }";
 
 //CreateActorMovie
     private static final String SET_MOVIE_ACTOR = "{ CALL SetMovieActor (?,?) }";
     private static final String SET_MOVIE_DIRECTOR = "{ CALL SetMovieDirector (?,?) }";
     private static final String SET_MOVIE_GENRE = "{ CALL SetMovieGenre (?,?) }";
 
-    private static final String SELECT_MOVIE = "{ CALL SelectMovie (?) }";
+    private static final String SELECT_ACTORS = "{ CALL SelectActors () }";
+    private static final String SELECT_DIRECTORS = "{ CALL SelectDirectors () }";
+    private static final String SELECT_GENRES = "{ CALL SelectGenres () }";
     private static final String SELECT_MOVIES = "{ CALL SelectMovies () }";
+
+    private static final String SELECT_MOVIE = "{ CALL SelectMovie (?) }";
     private static final String SELECT_ACTORS_IN_MOVIE = "{ CALL SelectActorsInMovie (?) }";
     private static final String SELECT_MOVIES_FROM_ACTOR = "{ CALL SelectMoviesFromActor (?) }";
     private static final String SELECT_DIRECTORS_IN_MOVIE = "{ CALL SelectDirectorsInMovie (?) }";
     private static final String SELECT_GENRES_IN_MOVIE = "{ CALL SelectGenresInMovie (?) }";
 
-    private static final String SELECT_MOVIE_ACTOR = "{ CALL SelectMovieActor () }";
-    private static final String SELECT_MOVIE_DIRECTOR = "{ CALL SelectMovieDirector () }";
-    private static final String SELECT_MOVIE_GENRE = "{ CALL SelectMovieGenre () }";
-    private static final String GET_ACTOR_NAME = "{ CALL GetActorName(?) }";
     private static final String DELETE_ACTOR = "{ CALL DeleteActor(?) }";
-     private static final String DELETE_DIRECTOR = "{ CALL DeleteDirector(?) }";
+    private static final String DELETE_DIRECTOR = "{ CALL DeleteDirector(?) }";
     private static final String DELETE_GENRE = "{ CALL DeleteGenre(?) }";
-
     private static final String DELETE_MOVIE = "{ CALL DeleteMovie(?) }";
-
-    private static final String SELECT_ACTORS = "{ CALL SelectActors () }";
-    private static final String SELECT_DIRECTORS = "{ CALL SelectDirectors () }";
-    private static final String SELECT_GENRES = "{ CALL SelectGenres () }";
 
     private static final String DELETE_ALL_DATA = "{ CALL DeleteAllData () }";
 
@@ -168,7 +154,9 @@ public class MovieSqlRepository implements MovieRepository {
 
     @Override
     public void setMovieActors(Movie movie) throws Exception {
-        if(movie.getActors().isEmpty()) return;
+        if (movie.getActors().isEmpty()) {
+            return;
+        }
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(SET_MOVIE_ACTOR)) {
@@ -179,11 +167,12 @@ public class MovieSqlRepository implements MovieRepository {
             }
         }
     }
-    
 
     @Override
     public void setMovieDirectors(Movie movie) throws Exception {
-        if(movie.getDirectors().isEmpty()) return;
+        if (movie.getDirectors().isEmpty()) {
+            return;
+        }
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(SET_MOVIE_DIRECTOR)) {
@@ -197,7 +186,9 @@ public class MovieSqlRepository implements MovieRepository {
 
     @Override
     public void setMovieGenres(Movie movie) throws Exception {
-        if(movie.getGenres().isEmpty())return;
+        if (movie.getGenres().isEmpty()) {
+            return;
+        }
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(SET_MOVIE_GENRE)) {
@@ -240,11 +231,8 @@ public class MovieSqlRepository implements MovieRepository {
         List<Movie> movies = getMovies();
 
 //        movieArchive.setActors(getActors());
-
-      //  movieArchive.setDirectors(getDirectors());
-
+        //  movieArchive.setDirectors(getDirectors());
         //movieArchive.setGenres(getGenres());
-
         for (Movie movie : movies) {
             List<Actor> actorsInMovie = getActorsInMovie(movie.getId());
             movie.addActors(actorsInMovie);
@@ -262,21 +250,19 @@ public class MovieSqlRepository implements MovieRepository {
         return movieArchive;
     }
 
-     @Override
+    @Override
     public MovieArchive getAllMData() throws Exception {
         MovieArchive movieArchive = new MovieArchive();
         DataSource dataSource = DataSourceSingleton.getInstance();
 
         List<Movie> movies = getMovies();
-                movieArchive.setMovies(movies);
-
+        movieArchive.setMovies(movies);
 
         movieArchive.setActors(getActors());
 
         movieArchive.setDirectors(getDirectors());
 
         movieArchive.setGenres(getGenres());
-
 
         return movieArchive;
     }
@@ -529,9 +515,9 @@ public class MovieSqlRepository implements MovieRepository {
             int insertedId = stmt.getInt("@" + ID_GENERIC);
             return insertedId;
 
-        }    }
+        }
+    }
 
-    
     @Override
     public void deleteActor(int Id) throws SQLException {
         DataSource dataSource = DataSourceSingleton.getInstance();
@@ -544,7 +530,8 @@ public class MovieSqlRepository implements MovieRepository {
 
         }
     }
-     @Override
+
+    @Override
     public void deleteMovie(int Id) throws Exception {
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection();
@@ -559,11 +546,11 @@ public class MovieSqlRepository implements MovieRepository {
 
     @Override
     public void updateMovie(Movie updatedMovie) throws Exception {
-            DataSource dataSource = DataSourceSingleton.getInstance();
+        DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(UPDATE_MOVIE)) {
 
-            stmt.setInt("@"+ID_GENERIC, updatedMovie.getId());
+            stmt.setInt("@" + ID_GENERIC, updatedMovie.getId());
             stmt.setString("@" + TITLE, updatedMovie.getTitle());
             stmt.setString("@" + PUBLISH_DATE, updatedMovie.getPubDate().toString());
 
@@ -574,10 +561,10 @@ public class MovieSqlRepository implements MovieRepository {
             stmt.setString("@" + POSTER_PATH, updatedMovie.getPosterPath());
             java.sql.Date releaseDate = new java.sql.Date(updatedMovie.getReleased().getTime());
             stmt.setDate("@" + RELEASED_DATE, releaseDate);
-         
+
             stmt.executeUpdate();
 
-    }
+        }
     }
 
     @Override
@@ -590,11 +577,12 @@ public class MovieSqlRepository implements MovieRepository {
 
             stmt.executeUpdate();
 
-        }    }
+        }
+    }
 
     @Override
     public void deleteGenre(int id) throws Exception {
- DataSource dataSource = DataSourceSingleton.getInstance();
+        DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(DELETE_GENRE)) {
 
@@ -602,8 +590,7 @@ public class MovieSqlRepository implements MovieRepository {
 
             stmt.executeUpdate();
 
-        }    }
-
-
+        }
+    }
 
 }

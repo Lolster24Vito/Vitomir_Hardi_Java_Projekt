@@ -14,12 +14,8 @@ import hr.algebra.models.Movie;
 import hr.algebra.models.MovieArchive;
 import hr.algebra.parsers.rss.MovieParser;
 import hr.algebra.utils.FileUtils;
-import hr.algebra.view.AdminPanel;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
+import hr.algebra.utils.MessageUtils;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -36,50 +32,45 @@ public class AdminFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
-     private MovieRepository repository;
+    private MovieRepository repository;
 
-     private DefaultListModel<String> moviesModel; 
-     private DefaultListModel<String> actorsModel;
-     private DefaultListModel<String> directorsModel;
-     private DefaultListModel<String> genresModel;
-    
-      private static final String UPLOAD_MOVIES = "Upload articles";
+    private DefaultListModel<String> moviesModel;
+    private DefaultListModel<String> actorsModel;
+    private DefaultListModel<String> directorsModel;
+    private DefaultListModel<String> genresModel;
+
+    private static final String UPLOAD_MOVIES = "Upload articles";
     private static final String EDIT_MOVIES = "Edit articles";
-    
-        private static final String POSTER_DIR = "assets\\moviePosters";
+
+    private static final String POSTER_DIR = "assets\\moviePosters";
 
     public AdminFrame() {
         initComponents();
-        try{
-        init();
+        try {
+            init();
+        } catch (Exception ex) {
+            Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
+
         }
-        catch (Exception ex){
-                        Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
-                        
-
-        }   
     }
-    
-     private void init() throws Exception {
-         
-        
-         
-          moviesModel=new DefaultListModel<>();
-          actorsModel=new DefaultListModel<>(); 
-          directorsModel=new DefaultListModel<>();
-          genresModel=new DefaultListModel<>();
 
-         repository = RepositoryFactory.getMovieRepository();
-     
-     MovieArchive movieArchiveDatabase=new MovieArchive();
-     movieArchiveDatabase.setActors(repository.getActors());
-     movieArchiveDatabase.setDirectors(repository.getDirectors());
-     movieArchiveDatabase.setGenres(repository.getGenres());
-     movieArchiveDatabase.setMovies(repository.getMovies());
-            //MovieArchive movieArchiveDatabase=repository.getMovieData();
-             updateJLists(movieArchiveDatabase);
+    private void init() throws Exception {
 
-     
+        moviesModel = new DefaultListModel<>();
+        actorsModel = new DefaultListModel<>();
+        directorsModel = new DefaultListModel<>();
+        genresModel = new DefaultListModel<>();
+
+        repository = RepositoryFactory.getMovieRepository();
+
+        MovieArchive movieArchiveDatabase = new MovieArchive();
+        movieArchiveDatabase.setActors(repository.getActors());
+        movieArchiveDatabase.setDirectors(repository.getDirectors());
+        movieArchiveDatabase.setGenres(repository.getGenres());
+        movieArchiveDatabase.setMovies(repository.getMovies());
+        //MovieArchive movieArchiveDatabase=repository.getMovieData();
+        updateJLists(movieArchiveDatabase);
+
     }
 
     /**
@@ -280,23 +271,22 @@ public class AdminFrame extends javax.swing.JFrame {
 
             //sql working code
             //movieArchiveDatabase=repository.getMovieData();
-
             //repository.createMovies(movieArchive.getMovies());
             //repository.setMovieActor("Test", 236);
             //  repository.createMovies(movieArchive.getMovies());
-
             //xml working code
-
-            movieArchiveloaded=MovieParser.parse();
+            movieArchiveloaded = MovieParser.parse();
             repository.addMovieArchive(movieArchiveloaded);
             updateJLists(repository.getAllMData());
+            MessageUtils.showInformationMessage("Success", "Successfully uploaded all files");
 
-        } catch (IOException ex) {
-            Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
-            Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
+            MessageUtils.showErrorMessage("Error", "Parse error");
+            Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
-            Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
+            MessageUtils.showErrorMessage("Error", "Error happened while uploading");
+
+            Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnUploadActionPerformed
 
@@ -304,18 +294,20 @@ public class AdminFrame extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             repository.deleteAllData();
-clearJLists();
+            clearJLists();
             FileUtils.deleteFilesFromDirectory(POSTER_DIR);
+            MessageUtils.showInformationMessage("Success", "Successfully deleted all files");
         } catch (Exception ex) {
-            Logger.getLogger(AdminPrototype.class.getName()).log(Level.SEVERE, null, ex);
+            MessageUtils.showErrorMessage("Error", "Files cannot be deleted");
+            Logger.getLogger(AdminFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnDeleteAllActionPerformed
 
     private void miSignOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miSignOutActionPerformed
         // TODO add your handling code here:
-        LoginFrame loginFrame=new LoginFrame();
-                        loginFrame.show();
-                       this.dispose();
+        LoginFrame loginFrame = new LoginFrame();
+        loginFrame.show();
+        this.dispose();
     }//GEN-LAST:event_miSignOutActionPerformed
 
     /**
@@ -376,56 +368,58 @@ clearJLists();
     private javax.swing.JMenuItem miSignOut;
     // End of variables declaration//GEN-END:variables
 
-  private void updateJListMovies(List<Movie> movies) {
-      moviesModel.clear();
-       movies.forEach(movie-> moviesModel.addElement(movie.toString()));
-        jlMovies.setModel(moviesModel);      
+    private void updateJListMovies(List<Movie> movies) {
+        moviesModel.clear();
+        movies.forEach(movie -> moviesModel.addElement(movie.toString()));
+        jlMovies.setModel(moviesModel);
     }
 
     private void updateJListActors(Set<Actor> actors) {
-       
+
         actorsModel.clear();
-        actors.forEach(actor->actorsModel.addElement(actor.getName()));
+        actors.forEach(actor -> actorsModel.addElement(actor.getName()));
         jlActors.setModel(actorsModel);
-        
+
     }
-     private void updateJListDirectors(Set<Director> directors) {
-       
+
+    private void updateJListDirectors(Set<Director> directors) {
+
         directorsModel.clear();
-        directors.forEach(actor->directorsModel.addElement(actor.getName()));
+        directors.forEach(actor -> directorsModel.addElement(actor.getName()));
         jlDirectors.setModel(directorsModel);
-        
+
     }
-      private void updateJListGenres(Set<Genre> genres) {
-       
+
+    private void updateJListGenres(Set<Genre> genres) {
+
         genresModel.clear();
-        genres.forEach(genre->genresModel.addElement(genre.getName()));
+        genres.forEach(genre -> genresModel.addElement(genre.getName()));
         jlGenres.setModel(genresModel);
-        
-    };
+
+    }
+
+    ;
      
-    private void updateJListGeneric(Set<String> names,DefaultListModel<String> defaultModel,JList<String> jlList){
-    defaultModel.clear();
-    names.forEach(defaultModel::addElement);
-    jlList.setModel(defaultModel);
+    private void updateJListGeneric(Set<String> names, DefaultListModel<String> defaultModel, JList<String> jlList) {
+        defaultModel.clear();
+        names.forEach(defaultModel::addElement);
+        jlList.setModel(defaultModel);
     }
 
     private void updateJLists(MovieArchive movieArchive) {
-            updateJListMovies(movieArchive.getMovies());
-            updateJListActors(movieArchive.getActors());
-            updateJListDirectors(movieArchive.getDirectors());
-            updateJListGenres(movieArchive.getGenres());
+        updateJListMovies(movieArchive.getMovies());
+        updateJListActors(movieArchive.getActors());
+        updateJListDirectors(movieArchive.getDirectors());
+        updateJListGenres(movieArchive.getGenres());
     }
-    private void clearJLists(){
+
+    private void clearJLists() {
         moviesModel.clear();
         actorsModel.clear();
         genresModel.clear();
-        jlMovies.removeAll();      
+        jlMovies.removeAll();
         jlActors.removeAll();
         jlGenres.removeAll();
     }
-    
-     
-    
 
 }
