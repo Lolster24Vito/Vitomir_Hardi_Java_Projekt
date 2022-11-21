@@ -151,10 +151,7 @@ public class UserFrame extends javax.swing.JFrame implements ActorsRefreshable, 
     }// </editor-fold>//GEN-END:initComponents
 
     private void miXMLDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miXMLDownloadActionPerformed
-  File file = FileUtils.uploadFile("Images", "jpg", "jpeg", "png");
-        if (file == null) {
-            return;
-        }
+  
         try {
             movieArchive = repository.getMovieData();
             JAXBUtils.save(movieArchive, FILENAME);

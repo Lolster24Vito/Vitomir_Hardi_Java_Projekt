@@ -5,10 +5,14 @@
         <group>
             <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/UserFrame.java</file>
             <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/LoginFrame.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/dal/UserRepository.java</file>
             <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/dal/sql/DataSourceSingleton.java</file>
             <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/GenericDbEntityDialog.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/dal/sql/UserSqlRepository.java</file>
             <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/AdminFrame.java</file>
-            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/view/UserMoviePanel.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/view/RegisterPanel.java</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/assets/A_bili_smo_vam_dobri_HR_zadnji.jpg</file>
+            <file>file:/C:/Users/vitom/Desktop/JavaProjekt/VitomirHardiJavaProjekt/src/hr/algebra/view/LoginPanel.java</file>
         </group>
     </open-files>
 </project-private>
